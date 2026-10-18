@@ -97,7 +97,7 @@ Rules:
 
 - 8px base grid. Spacing scale: 4, 8, 12, 16, 24, 32, 48, 64.
 - Desktop: 232px left sidebar, content canvas with a 960px max reading width, persistent top bar showing net worth and the date of the oldest unsynced balance.
-- Dashboard: hero figure with monthly change and a thin trend line, a row of view chips (All accounts and saved exclusion views), then group sections (Cash and bank, Investments, Fixed and retirement, Insurance and policies) as ledger rows. Each group header shows its subtotal. Liabilities appears as a full group only when something is recorded; otherwise it is one muted line.
+- Dashboard: hero figure with monthly change and a thin trend line, a row of view chips (All accounts and saved exclusion views), then an allocation bar, then group sections (Cash and bank, Investments, Fixed and retirement, Insurance and policies) as ledger rows. Each group header shows its subtotal. Liabilities appears as a full group only when something is recorded; otherwise it is one muted line.
 - Prefer borders and background steps over shadows. Radii: 6px controls, 10px panels.
 - Touch targets are at least 44px on the iOS adaptation; the sidebar becomes a bottom tab bar.
 
@@ -109,6 +109,10 @@ Rules:
 - **Hero figure:** serif, 56px, with the change since last month beneath in gain or loss colour with sign.
 - **View chip:** pill toggle above the groups. The selected chip uses `accent-soft` with accent text; choosing one recomputes the hero figure and change. Views are saved exclusion sets.
 - **Valuation basis label:** small muted text beside a group title (for example "valued at premiums paid") so a policy value is never mistaken for a market value.
+- **Allocation bar:** one 10px stacked bar with 2px gaps and a text legend with percentages. Segments are tints of the accent, never green or red, and never rely on colour alone because every segment is labelled. No donut charts.
+- **Coming up list:** hairline rows with the item on the left and the date on the right in muted ink. Same rhythm as a ledger row, no icons.
+- **Goal row:** name, a 4px progress track filled with the accent, and "₹ saved of ₹ target" on the right.
+- **History table:** months as rows, groups as columns, tabular right-aligned figures, net worth last. Hover uses `surface-sunken`. A "Take snapshot" secondary button sits in the section header.
 - **Update All step:** one account per screen, value pre-filled, Enter saves and advances, progress count in the corner.
 - **Button:** primary is accent fill with white text; secondary is bordered. One primary action per view.
 - **Empty states:** plain-language sentence and one action. No illustrations.
@@ -126,4 +130,4 @@ No purple or neon gradients, no glow, no decorative blobs, no three-column icon 
 - Confirm ₹ glyph and tabular numeral support in the chosen fonts (see Typography).
 - Decide the iOS type adaptation (SF Pro vs. the same families).
 - Decide how a saved view is created and edited (from the chip row or from settings).
-- Define chart styling (net-worth line, allocation) as the first Phase 1 chart is built.
+- Define chart styling for the net-worth line and group trends as the first Phase 1 chart is built.

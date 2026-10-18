@@ -99,6 +99,9 @@ P0 is the v1 release, P1 follows within the next two releases, P2 is later.
 | Staleness alerts | Amber after 7 days for synced accounts and 35 days for manual ones, red after 60 |
 | Spreadsheet import | Bring in an existing Google Sheet or CSV, including years of past totals, so history starts on day one. Maps its rows to accounts and its dated columns to snapshots, with a preview |
 | Saved views | Named net-worth views that exclude chosen accounts or groups (for example "without savings" or "without one policy"), switchable on the dashboard with a chip |
+| Monthly snapshot | One tap at month end records every account's current value as that month's snapshot, even if some are unchanged. Accounts that need an update are listed first |
+| Month-by-month history | A table of group totals and net worth per month, with change against the previous month and a drill-down to each account. Replaces the manual monthly columns of a spreadsheet |
+| Allocation view | A single stacked bar and legend showing the share of each group, using tints of one colour. Tapping a segment filters the ledger |
 | Search and filter | Find any account or transaction by name, amount, date or tag |
 | Local-first storage | All data on the device, encrypted at rest, with one-click export to CSV and JSON backup |
 | App lock | Passcode or biometric (Touch ID on Mac, Windows Hello) after idle |
@@ -109,6 +112,9 @@ Spreadsheet import and saved views come from how the first user already tracks m
 
 | Feature | Requirement |
 | --- | --- |
+| Maturity and renewal reminders | Each FD, RD, PPF, NPS and policy can carry a maturity or due date. A Coming up list on the dashboard, a calendar view, and a notification 30, 7 and 1 days before. Matured items prompt "renew, move or close" |
+| Goals and projections | Targets such as an emergency fund or a purchase, with a date and linked accounts. Progress bar, monthly amount needed, and projected completion at the current pace |
+| Asset allocation detail | Drill-down from the allocation bar by instrument type, institution and liquidity, plus a trend of each group over time |
 | Automatic price updates | Mutual fund NAVs and stock prices refreshed daily, so holdings revalue without typing |
 | Mutual fund and stock import | Import consolidated account statements (CAS) from the registrars to load all folios in one go |
 | Email-based capture | Read bank alert and statement emails from Gmail (read-only, opt-in) to log balances and transactions |
@@ -257,6 +263,7 @@ Each phase ends with a check you can run yourself. Durations are rough and assum
 - [ ] 4. Do you want single-device only, or desktop and iPhone sharing one store from the start?
 - [ ] 5. Do you hold foreign assets, crypto or ESOPs that need ₹ conversion rules?
 - [ ] 6. Should the dashboard show lakh/crore shorthand by default?
+- [ ] 8. Should goals draw on whole accounts or on a share of an account (for example half of a savings account)?
 - [ ] 7. For insurance policies, should the value be premiums paid or surrender value? The data model supports both; the default affects net worth.
 
 Sources: the data-ingestion options reflect general knowledge of India's financial data ecosystem and have not been verified against live provider documentation; confirm AA provider terms, AMFI file access and broker API pricing before building.

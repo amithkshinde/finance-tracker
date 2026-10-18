@@ -122,6 +122,26 @@ section { margin-top: 40px; }
   .row .badge, .row .age { display: none; }
   .hero .fig { font-size: 44px; }
 }
+
+.alloc { padding: 24px 0; border-bottom: 1px solid var(--border); }
+.bar { display: flex; height: 10px; border-radius: 999px; overflow: hidden; gap: 2px; margin: 12px 0; }
+.bar span { background: var(--accent); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 13px; color: var(--muted); }
+.legend i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 8px; background: var(--accent); }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.item { display: flex; justify-content: space-between; gap: 16px; padding: 12px 8px; border-bottom: 1px solid var(--border); }
+.item .when { color: var(--muted); font-size: 13px; white-space: nowrap; }
+.item .sub { font-size: 12px; color: var(--muted); }
+.prog { height: 4px; border-radius: 999px; background: var(--sunken); margin-top: 8px; overflow: hidden; }
+.prog span { display: block; height: 100%; background: var(--accent); }
+table.hist { width: 100%; border-collapse: collapse; font-size: 14px; }
+table.hist th { text-align: right; font-size: 12px; font-weight: 600; color: var(--muted); padding: 12px 8px 8px; }
+table.hist th:first-child, table.hist td:first-child { text-align: left; }
+table.hist td { text-align: right; padding: 10px 8px; border-bottom: 1px solid var(--border); font-weight: 500; }
+table.hist td:first-child { font-weight: 400; color: var(--muted); }
+table.hist tr:hover td { background: var(--sunken); }
+.snap { font: 500 13px var(--ui); color: var(--ink); background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 4px 12px; cursor: pointer; }
+@media (max-width: 760px) { .two { grid-template-columns: 1fr; gap: 0; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
@@ -153,7 +173,7 @@ section { margin-top: 40px; }
           <div class="fig" id="fig">₹14,10,600</div>
           <div class="short"><span class="delta" id="delta">+₹3,900 (+0.3%)</span> since last month · <span id="short">₹14.11 L</span></div>
         </div>
-        <svg class="spark" viewBox="0 0 280 72" role="img" aria-label="Net worth over the last 12 months: gradual rise, one dip in July, then recovering">
+        <svg class="spark" viewBox="0 0 280 72" role="img" aria-label="Net worth over the last 12 months: gradual rise, one dip, then recovering">
           <path d="M0 31 L25 30 L51 32 L76 27 L102 25 L127 21 L153 19 L178 10 L204 66 L229 55 L255 41 L280 40"/>
           <circle class="end" cx="280" cy="40" r="3"/>
         </svg>
@@ -164,6 +184,16 @@ section { margin-top: 40px; }
         <button class="chip" type="button" aria-pressed="true" data-fig="₹14,10,600" data-delta="+₹3,900 (+0.3%)" data-short="₹14.11 L">All accounts</button>
         <button class="chip" type="button" aria-pressed="false" data-fig="₹13,46,100" data-delta="+₹2,700 (+0.2%)" data-short="₹13.46 L">Without savings</button>
         <button class="chip" type="button" aria-pressed="false" data-fig="₹9,10,600" data-delta="+₹3,900 (+0.4%)" data-short="₹9.11 L">Without Smart Pension</button>
+      </div>
+
+      <div class="alloc">
+        <div class="label">Where it sits</div>
+        <div class="bar" role="img" aria-label="Allocation: cash and bank 4.9%, investments 9.5%, fixed and retirement 23.4%, insurance 62.2%">
+          <span style="width:4.9%;opacity:1"></span><span style="width:9.5%;opacity:.75"></span><span style="width:23.4%;opacity:.5"></span><span style="width:62.2%;opacity:.28"></span>
+        </div>
+        <div class="legend">
+          <span><i style="opacity:1"></i>Cash and bank 4.9%</span><span><i style="opacity:.75"></i>Investments 9.5%</span><span><i style="opacity:.5"></i>Fixed and retirement 23.4%</span><span><i style="opacity:.28"></i>Insurance 62.2%</span>
+        </div>
       </div>
 
       <div class="stale" role="status">
@@ -207,6 +237,33 @@ section { margin-top: 40px; }
         <div class="row"><div><div class="name">LIC Jeevan Anand</div><div class="inst">Premium monthly</div></div><span class="badge">Manual</span><div class="amt">₹1,50,000</div><div class="age"><span class="dot"></span>3d ago</div></div>
         <div class="row"><div><div class="name">LIC Jeevan Utsav</div><div class="inst">Premium monthly</div></div><span class="badge">Manual</span><div class="amt">₹60,000</div><div class="age"><span class="dot"></span>3d ago</div></div>
         <div class="row"><div><div class="name">LIC Smart Pension</div><div class="inst">Single premium</div></div><span class="badge">Manual</span><div class="amt">₹5,00,000</div><div class="age"><span class="dot"></span>3d ago</div></div>
+      </section>
+
+      <section class="two">
+        <div>
+          <div class="head"><span class="label">Coming up</span><span class="total"></span></div>
+          <div class="item"><div>LIC premiums due<div class="sub">Three policies</div></div><span class="when">5 Nov</span></div>
+          <div class="item"><div>FD · ICICI matures<div class="sub">Decide: renew or move</div></div><span class="when">Mar 2027</span></div>
+          <div class="item"><div>FD · SBI matures<div class="sub">Second FD</div></div><span class="when">Aug 2027</span></div>
+        </div>
+        <div>
+          <div class="head"><span class="label">Goals</span><span class="total"></span></div>
+          <div class="item"><div style="flex:1">Emergency fund<div class="prog"><span style="width:71%"></span></div></div><span class="when">₹1,42,000 of ₹2,00,000</span></div>
+          <div class="item"><div style="flex:1">New laptop<div class="prog"><span style="width:45%"></span></div></div><span class="when">₹54,000 of ₹1,20,000</span></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="head"><span class="label">Month by month</span><button class="snap" type="button">Take snapshot</button></div>
+        <table class="hist">
+          <thead><tr><th>Month</th><th>Cash and bank</th><th>Investments</th><th>Fixed and retirement</th><th>Insurance</th><th>Net worth</th></tr></thead>
+          <tbody>
+            <tr><td>Oct 2026</td><td>₹68,500</td><td>₹1,34,100</td><td>₹3,30,000</td><td>₹8,78,000</td><td>₹14,10,600</td></tr>
+            <tr><td>Sep 2026</td><td>₹66,000</td><td>₹1,32,700</td><td>₹3,30,000</td><td>₹8,78,000</td><td>₹14,06,700</td></tr>
+            <tr><td>Aug 2026</td><td>₹64,800</td><td>₹1,29,500</td><td>₹3,30,000</td><td>₹8,78,000</td><td>₹14,02,300</td></tr>
+            <tr><td>Jul 2026</td><td>₹61,200</td><td>₹1,28,900</td><td>₹3,30,000</td><td>₹8,78,000</td><td>₹13,98,100</td></tr>
+          </tbody>
+        </table>
       </section>
 
       <div class="none">Liabilities · none recorded</div>
