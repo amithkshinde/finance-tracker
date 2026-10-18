@@ -187,31 +187,31 @@ table.hist tr:hover td { background: var(--sunken); }
 
   <div class="main">
     <div class="top">
-      <span>Net worth <strong id="topfig">₹14,10,600</strong> · oldest unsynced balance: 62 days</span>
+      <span id="topleft">Net worth <strong id="topfig">₹14,10,600</strong> · oldest unsynced balance: 62 days</span>
       <button id="theme" type="button">Toggle theme</button>
     </div>
 
     <div class="wrap">
-      <div class="hero">
+      <div class="hero" id="hero">
         <div>
           <div class="label">Net worth · 18 Oct 2026</div>
           <div class="fig" id="fig">₹14,10,600</div>
           <div class="short"><span class="delta" id="delta">+₹3,900 (+0.3%)</span> since last month · <span id="short">₹14.11 L</span></div>
         </div>
-        <svg class="spark" viewBox="0 0 280 72" role="img" aria-label="Net worth over the last 12 months: gradual rise, steady rise with one small dip in January">
+        <svg class="spark" id="spark" viewBox="0 0 280 72" role="img" aria-label="Net worth over the last 12 months: gradual rise, steady rise with one small dip in January">
           <path d="M0 66 L25 62 L51 64 L76 55 L102 52 L127 41 L153 32 L178 24 L204 17 L229 14 L255 12 L280 10"/>
           <circle class="end" cx="280" cy="10" r="3"/>
         </svg>
       </div>
 
-      <div class="views" role="group" aria-label="Net worth view">
+      <div class="views" id="views" role="group" aria-label="Net worth view">
         <span class="label">View</span>
         <button class="chip" type="button" aria-pressed="true" data-fig="₹14,10,600" data-delta="+₹3,900 (+0.3%)" data-short="₹14.11 L">All accounts</button>
         <button class="chip" type="button" aria-pressed="false" data-fig="₹13,46,100" data-delta="+₹2,700 (+0.2%)" data-short="₹13.46 L">Without savings</button>
         <button class="chip" type="button" aria-pressed="false" data-fig="₹9,10,600" data-delta="+₹3,900 (+0.4%)" data-short="₹9.11 L">Without Smart Pension</button>
       </div>
 
-      <div class="alloc">
+      <div class="alloc" id="alloc">
         <div class="label">Where it sits</div>
         <div class="bar" role="img" aria-label="Allocation: cash and bank 4.9%, investments 9.5%, fixed and retirement 23.4%, insurance 62.2%">
           <span style="width:4.9%;opacity:1"></span><span style="width:9.5%;opacity:.75"></span><span style="width:23.4%;opacity:.5"></span><span style="width:62.2%;opacity:.28"></span>
@@ -221,12 +221,13 @@ table.hist tr:hover td { background: var(--sunken); }
         </div>
       </div>
 
-      <div class="stale" role="status">
+      <div class="stale" role="status" id="stale">
         <span class="dot amber"></span>
         <span>2 accounts need updating: Pockets (38 days) and PPF (62 days).</span>
         <button type="button">Update all</button>
       </div>
 
+      <div id="groups">
       <section>
         <div class="head"><span class="label">Cash and bank</span><span class="total">₹68,500</span></div>
         <div class="row"><div><div class="name">ICICI Savings</div><div class="inst">ICICI Bank</div></div><span class="badge">Manual</span><div class="amt">₹8,200</div><div class="age"><span class="dot"></span>3d ago</div></div>
@@ -264,7 +265,8 @@ table.hist tr:hover td { background: var(--sunken); }
         <div class="row"><div><div class="name">LIC Smart Pension</div><div class="inst">Single premium</div></div><span class="badge">Manual</span><div class="amt">₹5,00,000</div><div class="age"><span class="dot"></span>3d ago</div></div>
       </section>
 
-      <section class="two">
+      </div>
+      <section class="two" id="twosec">
         <div>
           <div class="head"><span class="label">Coming up</span><span class="total"></span></div>
           <div class="item"><div>LIC premiums due<div class="sub">Three policies</div></div><span class="when">5 Nov</span></div>
@@ -278,7 +280,7 @@ table.hist tr:hover td { background: var(--sunken); }
         </div>
       </section>
 
-      <section>
+      <section id="histsec">
         <div class="head"><span class="label">Month by month</span><button class="snap" type="button">Take snapshot</button></div>
         <div class="scroll"><table class="hist">
           <thead><tr><th>Month</th><th>Cash and bank</th><th>Investments</th><th>Fixed and retirement</th><th>Insurance</th><th>Net worth</th></tr></thead>
@@ -291,11 +293,13 @@ table.hist tr:hover td { background: var(--sunken); }
         </table></div>
       </section>
 
-      <div class="none">Liabilities · none recorded</div>
-      <p class="sample">Sample data in the structure of the real tracker. Amounts are illustrative.</p>
+      <div class="none" id="noneline">Liabilities · none recorded</div>
+      <p class="sample" id="samplenote">Sample data in the structure of the real tracker. Amounts are illustrative.</p>
     </div>
   </div>
 </div>
+<script src="data.js"></script>
+<script src="home-live.js"></script>
 <script>
 document.getElementById('theme').addEventListener('click', function () {
   var r = document.documentElement;

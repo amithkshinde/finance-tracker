@@ -75,6 +75,17 @@ td { text-align:right; padding:10px 8px; border-bottom:1px solid var(--border); 
 th:first-child, td:first-child { text-align:left; } td:first-child { color:var(--muted); font-weight:400; }
 .tools { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
 .hidden { display:none; }
+.wiz.hidden { display:none; }
+.wiz { position:fixed; inset:0; z-index:50; background:var(--bg); overflow:auto; display:flex; flex-direction:column; }
+.wiz .in { width:100%; max-width:560px; margin:0 auto; padding:24px 16px calc(24px + env(safe-area-inset-bottom)); flex:1; display:flex; flex-direction:column; }
+.wiz .top2 { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--muted); }
+.wiz .pb { height:4px; background:var(--sunken); border-radius:999px; margin:12px 0 40px; overflow:hidden; }
+.wiz .pb span { display:block; height:100%; background:var(--accent); transition:width 180ms var(--ease); }
+.wiz h2 { font:600 28px/1.2 var(--ui); margin:8px 0 4px; }
+.wiz .big { font-size:28px !important; padding:12px 14px 12px 40px !important; min-height:60px !important; width:100%; text-align:right; }
+.wiz .amtwrap span { font-size:24px; left:14px; }
+.wiz .acts { display:flex; gap:12px; margin-top:24px; flex-wrap:wrap; }
+.wiz .acts .btn { flex:1; min-height:48px; }
 .link { font:500 12px var(--ui); color:var(--accent); background:none; border:0; padding:2px 0; cursor:pointer; text-align:left; }
 .link:hover { text-decoration:underline; }
 .imp { margin-top:32px; }
@@ -109,6 +120,7 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
 <script>try{var s=JSON.parse(localStorage.getItem('ft.settings')||'{}');if(s.theme==='light'||s.theme==='dark')document.documentElement.setAttribute('data-theme',s.theme)}catch(e){}</script>
 </head>
 <body>
+<div class="wiz hidden" id="wiz" role="dialog" aria-modal="true" aria-label="Update all balances"><div class="in" id="wbody"></div></div>
 <div class="app">
   <aside class="side">
     <div class="brand">Finance Tracker</div>
@@ -142,7 +154,7 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
   <section id="p-update" role="tabpanel">
     <div class="bar">
       <div class="field"><label for="asof">As of</label><input type="date" id="asof"></div>
-      <div class="help">Leave a field blank to keep its last value. Amounts accept commas, for example 1,25,000.50.<br><button class="link" id="fillest" type="button">Fill all interest estimates</button></div>
+      <div class="help"><button class="btn primary" id="startwiz" type="button" style="margin-bottom:8px">Update one by one</button><br>Leave a field blank to keep its last value. Amounts accept commas, for example 1,25,000.50.<br><button class="link" id="fillest" type="button">Fill all interest estimates</button></div>
     </div>
     <div id="groups"></div>
     <div class="sticky">
@@ -235,9 +247,11 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
   function sortedSnaps() { return store.snaps.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; }); }
   function lastBefore(id, date) {
     var v = null, d = null;
-    sortedSnaps().forEach(function (s) { if (s.date <= date && s.values[id] != null) { v = s.values[id]; d = s.date; } });
+    sortedSnaps().forEach(function (s) { if (s.date <= date && s.values[id] != null) { v = s.values[id]; if (!s.entered || s.entered[id]) d = s.date; } });
+    if (v != null && d == null) d = sortedSnaps()[0].date;
     return v == null ? null : { v: v, d: d };
   }
+  function setVal(snap, id, n) { snap.values[id] = n; (snap.entered = snap.entered || {})[id] = 1; }
   function ensureSnap(date) {
     var s = snapFor(date);
     if (!s) { s = { date: date, values: {} }; store.snaps.push(s); store.accounts.forEach(function (a) { var l = lastBefore(a.id, date); if (l) s.values[a.id] = l.v; }); }
@@ -278,7 +292,7 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
         var inp = document.createElement('input'); inp.type = 'text'; inp.inputMode = 'decimal'; inp.autocomplete = 'off';
         inp.setAttribute('aria-label', a.name + ' value');
         inp.placeholder = last ? fmt.format(last.v) : '0';
-        if (snap && snap.values[a.id] != null) inp.value = fmt.format(snap.values[a.id]);
+        if (snap && snap.values[a.id] != null && (!snap.entered || snap.entered[a.id])) inp.value = fmt.format(snap.values[a.id]);
         inp.addEventListener('input', totals);
         inp.addEventListener('blur', function () { var n = parse(inp.value); if (n != null && !isNaN(n)) inp.value = fmt.format(n); });
         inp.addEventListener('keydown', function (e) {
@@ -317,7 +331,7 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
     if (!snap) { snap = { date: date, values: {} }; store.snaps.push(snap); }
     store.accounts.forEach(function (a) {
       if (a.archived) return;
-      if (entered[a.id] != null) snap.values[a.id] = entered[a.id];
+      if (entered[a.id] != null) setVal(snap, a.id, entered[a.id]);
       else if (snap.values[a.id] == null) { var l = lastBefore(a.id, date); if (l) snap.values[a.id] = l.v; }
     });
     persist(); renderUpdate(); renderHist();
@@ -376,7 +390,7 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
     var acc = { id: 'a' + (store.next++), name: name, inst: $('n-inst').value.trim(), group: $('n-group').value, type: $('n-type').value, basis: $('n-basis').value, due: $('n-date').value };
     if (accrOn && accrA && accrR && $('n-start').value) acc.accr = { kind: accrT, amt: accrA, rate: accrR, start: $('n-start').value };
     store.accounts.push(acc);
-    if (open != null) { ensureSnap($('asof').value).values[acc.id] = open; }
+    if (open != null) { setVal(ensureSnap($('asof').value), acc.id, open); }
     persist(); this.reset(); $('accrual').classList.add('hidden'); renderAll(); say('addmsg', name + ' added.', 'ok');
   });
 
@@ -432,7 +446,7 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
         good.forEach(function (g) {
           var a = g.acc || made[g.name.toLowerCase()];
           if (!a) { a = { id: 'a' + (store.next++), name: g.name, inst: '', group: sel ? sel.value : GROUPS[0], type: 'Other', basis: 'Balance', due: '' }; store.accounts.push(a); made[g.name.toLowerCase()] = a; }
-          ensureSnap(g.date).values[a.id] = g.amount;
+          setVal(ensureSnap(g.date), a.id, g.amount);
         });
         persist(); renderAll(); box.textContent = ''; say('histmsg', 'Imported ' + good.length + ' rows and created ' + Object.keys(made).length + ' accounts.', 'ok');
       });
@@ -440,6 +454,56 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
     };
     r.readAsText(file);
   });
+
+
+  var wq = [], wi = 0, wsaved = 0;
+  function wclose() { $('wiz').classList.add('hidden'); document.body.style.overflow = ''; renderAll(); if (location.hash === '#wizard') history.replaceState(null, '', location.pathname); }
+  function openWizard() {
+    var date = $('asof').value;
+    wq = store.accounts.filter(function (a) { return !a.archived; }).map(function (a) { return { a: a, l: lastBefore(a.id, date) }; });
+    wq.sort(function (x, y) { var dx = x.l ? x.l.d : '0000', dy = y.l ? y.l.d : '0000'; return dx < dy ? -1 : dx > dy ? 1 : 0; });
+    wi = 0; wsaved = 0; $('wiz').classList.remove('hidden'); document.body.style.overflow = 'hidden'; wshow();
+  }
+  function wshow() {
+    var box = $('wbody'), date = $('asof').value; box.textContent = '';
+    var top = el('div', 'top2'); top.appendChild(el('span', '', wi >= wq.length ? 'Done' : (wi + 1) + ' of ' + wq.length));
+    var x = el('button', 'link', 'Close'); x.type = 'button'; x.addEventListener('click', wclose); top.appendChild(x); box.appendChild(top);
+    var pb = el('div', 'pb'), bar = el('span'); bar.style.width = (wq.length ? Math.min(100, wi / wq.length * 100) : 100) + '%'; pb.appendChild(bar); box.appendChild(pb);
+    if (wi >= wq.length) {
+      box.appendChild(el('h2', '', 'All done'));
+      box.appendChild(el('p', 'sub', wsaved + (wsaved === 1 ? ' balance' : ' balances') + ' saved for ' + date + '. Your dashboard now shows these numbers.'));
+      var a = el('div', 'acts'); var h1 = el('a', 'btn primary', 'See your dashboard'); h1.href = 'dashboard-preview.html'; var c = el('button', 'btn', 'Stay here'); c.type = 'button'; c.addEventListener('click', wclose); a.appendChild(h1); a.appendChild(c); box.appendChild(a); return;
+    }
+    var it = wq[wi], acc = it.a;
+    box.appendChild(el('div', 'label', acc.group));
+    box.appendChild(el('h2', '', acc.name));
+    box.appendChild(el('div', 'sub', [acc.inst, acc.basis !== 'Balance' ? acc.basis : ''].filter(Boolean).join(' · ')));
+    var info = it.l ? 'Last ' + money(it.l.v) + ' on ' + it.l.d : 'No value yet';
+    box.appendChild(el('div', 'help', info)); box.lastChild.style.margin = '16px 0 8px';
+    var w = el('div', 'amtwrap'); w.appendChild(el('span', '', '₹'));
+    var inp = document.createElement('input'); inp.type = 'text'; inp.inputMode = 'decimal'; inp.autocomplete = 'off'; inp.className = 'big'; inp.placeholder = it.l ? fmt.format(it.l.v) : '0'; inp.setAttribute('aria-label', acc.name + ' value');
+    w.appendChild(inp); box.appendChild(w);
+    var e = est(acc, date);
+    if (e != null) { var lk = el('button', 'link', 'Estimate ' + money(e) + '. Use it'); lk.type = 'button'; lk.style.marginTop = '8px'; lk.addEventListener('click', function () { inp.value = fmt.format(e); inp.focus(); }); box.appendChild(lk); }
+    var msg = el('div', 'msg'); msg.setAttribute('role', 'status'); box.appendChild(msg);
+    var acts = el('div', 'acts');
+    var back = el('button', 'btn', 'Back'); back.type = 'button'; back.disabled = wi === 0; back.addEventListener('click', function () { wi--; wshow(); });
+    var skip = el('button', 'btn', 'Skip'); skip.type = 'button'; skip.addEventListener('click', function () { wi++; wshow(); });
+    var go = el('button', 'btn primary', 'Save and next'); go.type = 'button';
+    function save() {
+      var n = parse(inp.value);
+      if (isNaN(n)) { msg.textContent = 'Enter a number, for example 1,25,000.'; msg.className = 'msg err'; return; }
+      if (n == null) { wi++; wshow(); return; }
+      setVal(ensureSnap(date), acc.id, n); persist(); wsaved++; wi++; wshow();
+    }
+    go.addEventListener('click', save);
+    inp.addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); save(); } });
+    acts.appendChild(back); acts.appendChild(skip); acts.appendChild(go); box.appendChild(acts);
+    box.appendChild(el('div', 'help', 'Enter saves and moves on. Leave it empty and press Enter to keep the last value.')); box.lastChild.style.marginTop = '16px';
+    inp.focus();
+  }
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape' && !$('wiz').classList.contains('hidden')) wclose(); });
+  $('startwiz').addEventListener('click', openWizard);
 
   function tab(which) {
     ['update', 'add', 'hist'].forEach(function (k) {
@@ -470,10 +534,10 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
   });
 
   function renderAll() { renderUpdate(); renderHist(); }
-  var hs = location.hash.replace('#', ''); if (hs === 'add') tab('add'); else if (hs === 'history' || hs === 'hist') tab('hist');
   var g = $('n-group'); GROUPS.forEach(function (n) { var o = document.createElement('option'); o.textContent = n; g.appendChild(o); });
   var now = new Date(); $('asof').value = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
   renderAll();
+  var hs = location.hash.replace('#', ''); if (hs === 'wizard') openWizard(); else if (hs === 'add') tab('add'); else if (hs === 'history' || hs === 'hist') tab('hist');
 })();
 </script>
 </body>
