@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Finance Tracker — Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+<script>try{var s=JSON.parse(localStorage.getItem('ft.settings')||'{}');if(s.theme==='light'||s.theme==='dark')document.documentElement.setAttribute('data-theme',s.theme)}catch(e){}</script>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">Finance Tracker</div>
+    <nav class="nav" aria-label="Main">
+      <a href="dashboard-preview.html">Home</a>
+      <a href="accounts.html">Accounts</a>
+      <a href="history.html">History</a>
+      <a href="import.html">Import</a>
+      <a href="entry-form.html">Update</a>
+      <a href="connections.html">Connections</a>
+      <a class="on" aria-current="page" href="settings.html">Settings</a>
+    </nav>
+    <div class="foot">Data stays on this Mac.<br>Last backup 3 days ago.</div>
+  </aside>
+  <div class="main">
+    <div class="top"><span>Settings</span><button class="btn" id="theme" type="button" style="padding:4px 10px">Toggle theme</button></div>
+    <div class="wrap">
+<div class="pagehead"><div><h1>Settings</h1><p class="lede">Changes save as you make them, in this browser.</p></div></div>
+<div class="head" style="margin-top:0"><span class="label">Display</span><span class="total"></span></div>
+<div class="set"><div><div class="t"><label for="s-theme">Theme</label></div><div class="d">Follow the system, or always light or dark.</div></div><select id="s-theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></div>
+<div class="set"><div><div class="t"><label for="s-short">Lakh and crore shorthand</label></div><div class="d">Show ₹14.11 L instead of ₹14,10,600 in compact places.</div></div><input type="checkbox" class="switch" id="s-short" role="switch"></div>
+<div class="head"><span class="label">When a balance counts as old</span><span class="total"></span></div>
+<div class="set"><div><div class="t"><label for="s-synced">Synced accounts turn amber after</label></div><div class="d">Accounts that update themselves should rarely be old.</div></div><span><input type="number" class="num" id="s-synced" min="1" max="365" value="7"> days</span></div><div class="set"><div><div class="t"><label for="s-manual">Manual accounts turn amber after</label></div><div class="d">Balances you type in.</div></div><span><input type="number" class="num" id="s-manual" min="1" max="365" value="35"> days</span></div><div class="set"><div><div class="t"><label for="s-red">Any account turns red after</label></div><div class="d">The point where a number can no longer be trusted.</div></div><span><input type="number" class="num" id="s-red" min="1" max="365" value="60"> days</span></div>
+<div class="head"><span class="label">Reminders</span><span class="total"></span></div>
+<div class="set"><div><div class="t"><label for="s-month">Month-end update reminder</label></div><div class="d">A notification listing the accounts that need updating.</div></div><input type="checkbox" class="switch" id="s-month" role="switch" checked></div><div class="set"><div><div class="t"><label for="s-mat">Maturity and renewal reminders</label></div><div class="d">30, 7 and 1 days before an FD, RD or policy date.</div></div><input type="checkbox" class="switch" id="s-mat" role="switch" checked></div>
+<div class="head"><span class="label">Security</span><span class="total"></span></div>
+<div class="set"><div><div class="t"><label for="s-lock">Lock the app when idle</label></div><div class="d">Asks for Touch ID or your passcode. Takes effect in the desktop app.</div></div><input type="checkbox" class="switch" id="s-lock" role="switch" checked></div><div class="set"><div><div class="t"><label for="s-idle">Lock after</label></div><div class="d">Minutes without activity.</div></div><select id="s-idle"><option>1</option><option>5</option><option>15</option><option>30</option></select></div>
+<div class="head"><span class="label">Your data</span><span class="total"></span></div>
+<div class="set"><div><div class="t">Export or back up</div><div class="d">CSV for a spreadsheet, or a JSON backup you can restore.</div></div><a class="btn" href="entry-form.html#history">Open</a></div>
+<div class="set"><div><div class="t">Erase all data</div><div class="d">Removes every account and snapshot from this browser. Export a backup first.</div></div><a class="btn" href="entry-form.html#history">Go to erase</a></div>
+<p class="note">Settings live in this browser. The desktop app will keep them with your encrypted data.</p>
+    </div>
+  </div>
+</div>
+<script>
+function toast(t){var e=document.createElement('div');e.className='toast';e.setAttribute('role','status');e.textContent=t;document.body.appendChild(e);setTimeout(function(){e.remove()},2200)}
+function cfg(){try{return JSON.parse(localStorage.getItem('ft.settings')||'{}')}catch(e){return {}}}
+function setcfg(o){try{localStorage.setItem('ft.settings',JSON.stringify(Object.assign(cfg(),o)))}catch(e){}}
+document.getElementById('theme').addEventListener('click',function(){var r=document.documentElement;var dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);var n=dark?'light':'dark';r.setAttribute('data-theme',n);setcfg({theme:n})});
+var D={theme:'system',short:false,synced:7,manual:35,red:60,month:true,mat:true,lock:true,idle:'5'};
+var s=Object.assign({},D,cfg());
+function ids(){return {'s-theme':'theme','s-short':'short','s-synced':'synced','s-manual':'manual','s-red':'red','s-month':'month','s-mat':'mat','s-lock':'lock','s-idle':'idle'}}
+var m=ids();Object.keys(m).forEach(function(id){var e=document.getElementById(id),k=m[id];
+if(e.type==='checkbox')e.checked=!!s[k];else e.value=s[k];
+e.addEventListener('change',function(){var o={};o[k]=e.type==='checkbox'?e.checked:(e.type==='number'?Math.max(1,Math.min(365,+e.value||D[k])):e.value);setcfg(o);
+if(k==='theme'){var r=document.documentElement;if(e.value==='system')r.removeAttribute('data-theme');else r.setAttribute('data-theme',e.value)}toast('Saved')})});
+</script>
+</body>
+</html>

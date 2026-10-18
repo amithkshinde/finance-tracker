@@ -109,6 +109,10 @@ Rules:
 - Inputs are 16px or larger so iOS does not zoom on focus. Buttons, chips and tabs are at least 36px tall, and primary actions (Update all, Save snapshot) are 44px.
 - The hero figure drops to 44px and the trend line spans the full width.
 
+## Pages (design previews in `design/`)
+
+Home (`dashboard-preview.html`), Accounts, History, Import, Update (`entry-form.html`), Connections and Settings. All share `design/app.css`, so rows, chips, buttons and tables look the same everywhere. Settings and the entry form work in the browser; Accounts, History, Import and Connections show sample data. On mobile all seven destinations stay in one scrollable bottom bar.
+
 ## Components
 
 - **Ledger row:** account name and institution on the left; balance (tabular, right-aligned) with source badge and age dot on the right. Inline edit on click. Hover is a subtle `surface-sunken` background.

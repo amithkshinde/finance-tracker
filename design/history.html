@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Finance Tracker — History</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+<script>try{var s=JSON.parse(localStorage.getItem('ft.settings')||'{}');if(s.theme==='light'||s.theme==='dark')document.documentElement.setAttribute('data-theme',s.theme)}catch(e){}</script>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">Finance Tracker</div>
+    <nav class="nav" aria-label="Main">
+      <a href="dashboard-preview.html">Home</a>
+      <a href="accounts.html">Accounts</a>
+      <a class="on" aria-current="page" href="history.html">History</a>
+      <a href="import.html">Import</a>
+      <a href="entry-form.html">Update</a>
+      <a href="connections.html">Connections</a>
+      <a href="settings.html">Settings</a>
+    </nav>
+    <div class="foot">Data stays on this Mac.<br>Last backup 3 days ago.</div>
+  </aside>
+  <div class="main">
+    <div class="top"><span>Net worth <strong>₹14,10,600</strong></span><button class="btn" id="theme" type="button" style="padding:4px 10px">Toggle theme</button></div>
+    <div class="wrap">
+<div class="pagehead">
+  <div><h1>History</h1><p class="lede">How your net worth has moved, built from the snapshots you save each month.</p></div>
+  <div class="chips" role="group" aria-label="Range"><button class="chip" type="button" data-n="3" aria-pressed="false">3M</button><button class="chip" type="button" data-n="6" aria-pressed="false">6M</button><button class="chip" type="button" data-n="12" aria-pressed="true">1Y</button></div>
+</div>
+<div class="label" id="rng">Net worth, last 12 months</div>
+<div style="font:500 40px/1.1 var(--serif);margin:8px 0 4px" id="big"></div>
+<div class="sub" id="chg" style="font-size:13px"></div>
+<svg class="chart" viewBox="0 0 600 200" preserveAspectRatio="none" role="img" id="svg" aria-label="Net worth over time" style="margin-top:16px">
+  <line class="grid" x1="0" x2="600" y1="20" y2="20"/><line class="grid" x1="0" x2="600" y1="100" y2="100"/><line class="grid" x1="0" x2="600" y1="180" y2="180"/>
+  <path class="line" id="ln" d=""/>
+</svg>
+<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted)" id="axis"></div>
+<div class="head"><span class="label">Month by month</span><span class="total"></span></div>
+<div class="scroll"><table><thead><tr><th>Month</th><th>Net worth</th><th>Change</th><th>Change %</th></tr></thead><tbody>
+<tr><td>Oct 2026</td><td>₹14,10,600</td><td class="gain">+₹3,900</td><td class="gain">+0.3%</td></tr>
+<tr><td>Sep 2026</td><td>₹14,06,700</td><td class="gain">+₹4,400</td><td class="gain">+0.3%</td></tr>
+<tr><td>Aug 2026</td><td>₹14,02,300</td><td class="gain">+₹4,200</td><td class="gain">+0.3%</td></tr>
+<tr><td>Jul 2026</td><td>₹13,98,100</td><td class="gain">+₹14,100</td><td class="gain">+1.0%</td></tr>
+<tr><td>Jun 2026</td><td>₹13,84,000</td><td class="gain">+₹14,000</td><td class="gain">+1.0%</td></tr>
+<tr><td>May 2026</td><td>₹13,70,000</td><td class="gain">+₹18,000</td><td class="gain">+1.3%</td></tr>
+<tr><td>Apr 2026</td><td>₹13,52,000</td><td class="gain">+₹21,000</td><td class="gain">+1.6%</td></tr>
+<tr><td>Mar 2026</td><td>₹13,31,000</td><td class="gain">+₹4,500</td><td class="gain">+0.3%</td></tr>
+<tr><td>Feb 2026</td><td>₹13,26,500</td><td class="gain">+₹18,500</td><td class="gain">+1.4%</td></tr>
+<tr><td>Jan 2026</td><td>₹13,08,000</td><td class="loss">−₹4,400</td><td class="loss">−0.3%</td></tr>
+<tr><td>Dec 2025</td><td>₹13,12,400</td><td class="gain">+₹7,400</td><td class="gain">+0.6%</td></tr>
+<tr><td>Nov 2025</td><td>₹13,05,000</td><td>–</td><td>–</td></tr>
+</tbody></table></div>
+<p class="note">Sample data. Changes are against the previous month. Green and red show gain and loss, and every figure also carries a sign.</p>
+    </div>
+  </div>
+</div>
+<script>
+function toast(t){var e=document.createElement('div');e.className='toast';e.setAttribute('role','status');e.textContent=t;document.body.appendChild(e);setTimeout(function(){e.remove()},2200)}
+function cfg(){try{return JSON.parse(localStorage.getItem('ft.settings')||'{}')}catch(e){return {}}}
+function setcfg(o){try{localStorage.setItem('ft.settings',JSON.stringify(Object.assign(cfg(),o)))}catch(e){}}
+document.getElementById('theme').addEventListener('click',function(){var r=document.documentElement;var dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);var n=dark?'light':'dark';r.setAttribute('data-theme',n);setcfg({theme:n})});
+var S=[1305000, 1312400, 1308000, 1326500, 1331000, 1352000, 1370000, 1384000, 1398100, 1402300, 1406700, 1410600],M=["Nov 2025", "Dec 2025", "Jan 2026", "Feb 2026", "Mar 2026", "Apr 2026", "May 2026", "Jun 2026", "Jul 2026", "Aug 2026", "Sep 2026", "Oct 2026"],f=new Intl.NumberFormat('en-IN'),n=12;
+function draw(){var v=S.slice(-n),m=M.slice(-n),mn=Math.min.apply(0,v),mx=Math.max.apply(0,v),pad=(mx-mn)*0.15||1,lo=mn-pad,hi=mx+pad;
+var d=v.map(function(x,i){return(i?'L':'M')+(i*600/(v.length-1)).toFixed(1)+' '+(180-(x-lo)/(hi-lo)*160).toFixed(1)}).join(' ');document.getElementById('ln').setAttribute('d',d);
+var ch=v[v.length-1]-v[0];document.getElementById('big').textContent='₹'+f.format(v[v.length-1]);
+document.getElementById('chg').innerHTML='<span class="'+(ch>=0?'gain':'loss')+'">'+(ch>=0?'+':'−')+'₹'+f.format(Math.abs(ch))+'</span> over '+(n===12?'the year':n+' months')+' · high ₹'+f.format(mx)+', low ₹'+f.format(mn);
+document.getElementById('rng').textContent='Net worth, last '+(n===12?'12 months':n+' months');
+document.getElementById('axis').innerHTML='<span>'+m[0]+'</span><span>'+m[m.length-1]+'</span>';
+document.getElementById('svg').setAttribute('aria-label','Net worth from '+m[0]+' to '+m[m.length-1]+': from ₹'+f.format(v[0])+' to ₹'+f.format(v[v.length-1]))}
+document.querySelectorAll('[data-n]').forEach(function(b){b.onclick=function(){n=+b.dataset.n;document.querySelectorAll('[data-n]').forEach(function(x){x.setAttribute('aria-pressed',x===b)});draw()}});draw();
+</script>
+</body>
+</html>

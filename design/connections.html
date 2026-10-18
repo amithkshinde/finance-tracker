@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Finance Tracker — Connections</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+<script>try{var s=JSON.parse(localStorage.getItem('ft.settings')||'{}');if(s.theme==='light'||s.theme==='dark')document.documentElement.setAttribute('data-theme',s.theme)}catch(e){}</script>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">Finance Tracker</div>
+    <nav class="nav" aria-label="Main">
+      <a href="dashboard-preview.html">Home</a>
+      <a href="accounts.html">Accounts</a>
+      <a href="history.html">History</a>
+      <a href="import.html">Import</a>
+      <a href="entry-form.html">Update</a>
+      <a class="on" aria-current="page" href="connections.html">Connections</a>
+      <a href="settings.html">Settings</a>
+    </nav>
+    <div class="foot">Data stays on this Mac.<br>Last backup 3 days ago.</div>
+  </aside>
+  <div class="main">
+    <div class="top"><span>Connections · <strong>2 active</strong></span><button class="btn" id="theme" type="button" style="padding:4px 10px">Toggle theme</button></div>
+    <div class="wrap">
+<div class="pagehead">
+  <div><h1>Connections</h1><p class="lede">Sources that update balances for you. Each one is optional, read-only, and can be removed at any time.</p></div>
+</div>
+<div class="head" style="margin-top:0"><span class="label">Prices and funds</span><span class="total"></span></div>
+<div class="set"><div><div class="t">Mutual fund NAVs</div><div class="d">Daily prices from the public fund-house data, so fund balances revalue without typing.</div><div class="d" style="margin-top:4px;display:flex;align-items:center;gap:8px"><span class="dot green"></span>Connected · updated today</div></div><button class="btn" type="button" >Disconnect</button></div><div class="set"><div><div class="t">Zerodha Kite</div><div class="d">Reads holdings through your broker login. No orders can be placed.</div><div class="d" style="margin-top:4px;display:flex;align-items:center;gap:8px"><span class="dot green"></span>Connected · synced 1 day ago · access expires 12 Jan</div></div><button class="btn" type="button" >Disconnect</button></div>
+<div class="head"><span class="label">Email and statements</span><span class="total"></span></div>
+<div class="set"><div><div class="t">Gmail, read-only</div><div class="d">Finds bank alerts and statements in a label you choose. Nothing is sent or deleted.</div><div class="d" style="margin-top:4px;display:flex;align-items:center;gap:8px"><span class="dot "></span>Not connected</div></div><button class="btn" type="button" >Connect</button></div><div class="set"><div><div class="t">Mutual fund statement by email</div><div class="d">Reads the monthly consolidated statement when it arrives.</div><div class="d" style="margin-top:4px;display:flex;align-items:center;gap:8px"><span class="dot "></span>Not connected</div></div><button class="btn" type="button" >Connect</button></div>
+<div class="head"><span class="label">Bank data</span><span class="total"></span></div>
+<div class="set"><div><div class="t">Account Aggregator</div><div class="d">Consent-based bank and deposit data through a licensed provider. Feasibility for a personal app is still being checked.</div><div class="d" style="margin-top:4px;display:flex;align-items:center;gap:8px"><span class="dot amber"></span>Not available yet</div></div><button class="btn" type="button" disabled>Not available</button></div>
+<p class="note">Design preview. None of these connections exist yet; the statuses are sample data. The rule they follow: read-only access, your approval for each source, and a visible expiry date for every permission.</p>
+    </div>
+  </div>
+</div>
+<script>
+function toast(t){var e=document.createElement('div');e.className='toast';e.setAttribute('role','status');e.textContent=t;document.body.appendChild(e);setTimeout(function(){e.remove()},2200)}
+function cfg(){try{return JSON.parse(localStorage.getItem('ft.settings')||'{}')}catch(e){return {}}}
+function setcfg(o){try{localStorage.setItem('ft.settings',JSON.stringify(Object.assign(cfg(),o)))}catch(e){}}
+document.getElementById('theme').addEventListener('click',function(){var r=document.documentElement;var dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);var n=dark?'light':'dark';r.setAttribute('data-theme',n);setcfg({theme:n})});
+document.querySelectorAll('.set .btn').forEach(function(b){b.addEventListener('click',function(){if(!b.disabled)toast('Not built yet. This is a design preview.')})});
+</script>
+</body>
+</html>

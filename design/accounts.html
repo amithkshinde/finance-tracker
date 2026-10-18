@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Finance Tracker — Accounts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+<script>try{var s=JSON.parse(localStorage.getItem('ft.settings')||'{}');if(s.theme==='light'||s.theme==='dark')document.documentElement.setAttribute('data-theme',s.theme)}catch(e){}</script>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">Finance Tracker</div>
+    <nav class="nav" aria-label="Main">
+      <a href="dashboard-preview.html">Home</a>
+      <a class="on" aria-current="page" href="accounts.html">Accounts</a>
+      <a href="history.html">History</a>
+      <a href="import.html">Import</a>
+      <a href="entry-form.html">Update</a>
+      <a href="connections.html">Connections</a>
+      <a href="settings.html">Settings</a>
+    </nav>
+    <div class="foot">Data stays on this Mac.<br>Last backup 3 days ago.</div>
+  </aside>
+  <div class="main">
+    <div class="top"><span>Accounts · <strong>21</strong> active</span><button class="btn" id="theme" type="button" style="padding:4px 10px">Toggle theme</button></div>
+    <div class="wrap">
+<div class="pagehead">
+  <div><h1>Accounts</h1><p class="lede">Every account in one list. Filter by group, search by name, and see which balances are getting old.</p></div>
+  <div class="chips"><a class="btn" href="entry-form.html">Update balances</a><a class="btn primary" href="entry-form.html#add">Add account</a></div>
+</div>
+<div class="chips" role="group" aria-label="Filter by group" id="gchips"></div>
+<div style="display:flex;gap:12px;align-items:center;margin-top:16px;flex-wrap:wrap">
+  <input type="search" id="q" placeholder="Search accounts" aria-label="Search accounts" style="flex:1;min-width:200px">
+  <label class="chips" style="font-size:13px;color:var(--muted)"><input type="checkbox" id="stale" style="width:16px;height:16px;margin-right:6px">Needs updating only</label>
+</div>
+<div class="head"><span class="label" id="count">All accounts</span><span class="total" id="sum"></span></div>
+<div id="list"></div>
+<p class="sub" id="empty" style="padding:24px 8px" hidden>No accounts match. Clear the search or pick another group.</p>
+<p class="note">Sample data in the structure of the real tracker. Amounts are illustrative.</p>
+    </div>
+  </div>
+</div>
+<script>
+function toast(t){var e=document.createElement('div');e.className='toast';e.setAttribute('role','status');e.textContent=t;document.body.appendChild(e);setTimeout(function(){e.remove()},2200)}
+function cfg(){try{return JSON.parse(localStorage.getItem('ft.settings')||'{}')}catch(e){return {}}}
+function setcfg(o){try{localStorage.setItem('ft.settings',JSON.stringify(Object.assign(cfg(),o)))}catch(e){}}
+document.getElementById('theme').addEventListener('click',function(){var r=document.documentElement;var dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);var n=dark?'light':'dark';r.setAttribute('data-theme',n);setcfg({theme:n})});
+var DATA=[["Cash and bank", "ICICI Savings", "ICICI Bank · Savings", "Manual", 8200, 3], ["Cash and bank", "SBI Savings", "State Bank of India · Savings", "Manual", 6900, 3], ["Cash and bank", "HDFC Savings", "HDFC Bank · Savings", "Imported", 31400, 2], ["Cash and bank", "Pockets", "Wallet", "Manual", 18000, 38], ["Cash and bank", "Digital Rupee", "e₹ wallet · ICICI", "Manual", 4000, 3], ["Investments", "Shares · ICICI Demat", "ICICI Direct · Market value", "Manual", 52300, 3], ["Investments", "Shares · Zerodha Kite", "Zerodha · Market value", "Synced", 13800, 1], ["Investments", "Shares · Groww", "Groww · Market value", "Manual", 2100, 3], ["Investments", "Mutual funds · ICICI Demat", "NAV updated daily", "Synced", 36500, 1], ["Investments", "Mutual funds · Zerodha Coin", "NAV updated daily", "Synced", 29400, 1], ["Fixed and retirement", "FD · ICICI", "Matures Mar 2027", "Manual", 84000, 9], ["Fixed and retirement", "FD · SBI", "Matures Aug 2027", "Manual", 26500, 9], ["Fixed and retirement", "FD · SBI", "Matures Jan 2028", "Manual", 46000, 9], ["Fixed and retirement", "RD · ICICI iWish", "Monthly instalment", "Manual", 92000, 3], ["Fixed and retirement", "NPS · Tier 1", "Retirement", "Imported", 14100, 21], ["Fixed and retirement", "NPS · Tier 2", "Voluntary", "Imported", 8400, 21], ["Fixed and retirement", "PPF · SBI", "Matures 2038", "Manual", 59000, 62], ["Insurance and policies", "LIC Jeevan Umang", "Premiums paid", "Manual", 168000, 3], ["Insurance and policies", "LIC Jeevan Anand", "Premiums paid", "Manual", 150000, 3], ["Insurance and policies", "LIC Jeevan Utsav", "Premiums paid", "Manual", 60000, 3], ["Insurance and policies", "LIC Smart Pension", "Premiums paid", "Manual", 500000, 3]];
+var GROUPS=['All'].concat(DATA.map(function(a){return a[0]}).filter(function(v,i,s){return s.indexOf(v)===i}));
+var cur='All';
+var f=new Intl.NumberFormat('en-IN');
+function sev(d,src){var lim=src==='Manual'?35:7;return d>60?'red':d>lim?'amber':''}
+function chips(){var h=document.getElementById('gchips');h.textContent='';GROUPS.forEach(function(g){var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=g==='All'?'All accounts':g;b.setAttribute('aria-pressed',g===cur);b.onclick=function(){cur=g;chips();draw()};h.appendChild(b)})}
+function draw(){var q=document.getElementById('q').value.trim().toLowerCase(),so=document.getElementById('stale').checked,l=document.getElementById('list');l.textContent='';var tot=0,n=0;
+DATA.forEach(function(a){if(cur!=='All'&&a[0]!==cur)return;if(q&&(a[1]+' '+a[2]).toLowerCase().indexOf(q)<0)return;var s=sev(a[5],a[3]);if(so&&!s)return;n++;tot+=a[4];
+var r=document.createElement('div');r.className='row';
+var m=document.createElement('div');var nm=document.createElement('div');nm.className='name';nm.textContent=a[1];var ins=document.createElement('div');ins.className='inst';ins.textContent=a[2];m.appendChild(nm);m.appendChild(ins);
+var b=document.createElement('span');b.className='badge';b.textContent=a[3];
+var am=document.createElement('div');am.className='amt';am.textContent='₹'+f.format(a[4]);
+var ag=document.createElement('div');ag.className='age '+s;var d=document.createElement('span');d.className='dot '+s;ag.appendChild(d);ag.appendChild(document.createTextNode(a[5]+'d ago'));
+r.appendChild(m);r.appendChild(b);r.appendChild(am);r.appendChild(ag);l.appendChild(r)});
+document.getElementById('count').textContent=n+(n===1?' account':' accounts');document.getElementById('sum').textContent='₹'+f.format(tot);document.getElementById('empty').hidden=n>0}
+document.getElementById('q').addEventListener('input',draw);document.getElementById('stale').addEventListener('change',draw);chips();draw();
+</script>
+</body>
+</html>

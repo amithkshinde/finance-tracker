@@ -124,9 +124,9 @@ table.hist td:first-child, table.hist th:first-child { position: sticky; left: 0
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; flex-direction: row; padding: 0 4px env(safe-area-inset-bottom);
     background: var(--bg); border-right: 0; border-top: 1px solid var(--border); gap: 0;
   }
-  .brand, .side .foot, .nav a.d { display: none; }
-  .nav { display: flex; width: 100%; }
-  .nav a { flex: 1; text-align: center; min-height: 56px; padding: 18px 2px 0; font-size: 12px; border-radius: 0; }
+  .brand, .side .foot { display: none; }
+  .nav { display: flex; width: 100%; overflow-x: auto; }
+  .nav a { flex: 0 0 auto; min-width: 76px; text-align: center; min-height: 56px; padding: 18px 8px 0; font-size: 12px; border-radius: 0; }
   .top { padding: 10px 16px; gap: 12px; align-items: flex-start; font-size: 12px; }
   .top button { min-height: 36px; flex: none; }
   .wrap { padding: 24px 16px 32px; }
@@ -167,19 +167,20 @@ table.hist tr:hover td { background: var(--sunken); }
 @media (max-width: 760px) { .two { grid-template-columns: 1fr; gap: 40px; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
+<script>try{var s=JSON.parse(localStorage.getItem('ft.settings')||'{}');if(s.theme==='light'||s.theme==='dark')document.documentElement.setAttribute('data-theme',s.theme)}catch(e){}</script>
 </head>
 <body>
 <div class="app">
   <aside class="side">
     <div class="brand">Finance Tracker</div>
-    <nav class="nav">
-      <a class="on" href="#">Home</a>
-      <a href="#">Accounts</a>
-      <a href="#">History</a>
-      <a href="#">Import</a>
+    <nav class="nav" aria-label="Main">
+      <a class="on" href="dashboard-preview.html">Home</a>
+      <a href="accounts.html">Accounts</a>
+      <a href="history.html">History</a>
+      <a href="import.html">Import</a>
       <a href="entry-form.html">Update</a>
-      <a class="d" href="#">Connections</a>
-      <a class="d" href="#">Settings</a>
+      <a href="connections.html">Connections</a>
+      <a href="settings.html">Settings</a>
     </nav>
     <div class="foot">Data stays on this Mac.<br>Last backup 3 days ago.</div>
   </aside>
@@ -197,9 +198,9 @@ table.hist tr:hover td { background: var(--sunken); }
           <div class="fig" id="fig">₹14,10,600</div>
           <div class="short"><span class="delta" id="delta">+₹3,900 (+0.3%)</span> since last month · <span id="short">₹14.11 L</span></div>
         </div>
-        <svg class="spark" viewBox="0 0 280 72" role="img" aria-label="Net worth over the last 12 months: gradual rise, one dip, then recovering">
-          <path d="M0 31 L25 30 L51 32 L76 27 L102 25 L127 21 L153 19 L178 10 L204 66 L229 55 L255 41 L280 40"/>
-          <circle class="end" cx="280" cy="40" r="3"/>
+        <svg class="spark" viewBox="0 0 280 72" role="img" aria-label="Net worth over the last 12 months: gradual rise, steady rise with one small dip in January">
+          <path d="M0 66 L25 62 L51 64 L76 55 L102 52 L127 41 L153 32 L178 24 L204 17 L229 14 L255 12 L280 10"/>
+          <circle class="end" cx="280" cy="10" r="3"/>
         </svg>
       </div>
 

@@ -91,6 +91,7 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
 }
 @media (prefers-reduced-motion:reduce) { * { transition:none !important; } }
 </style>
+<script>try{var s=JSON.parse(localStorage.getItem('ft.settings')||'{}');if(s.theme==='light'||s.theme==='dark')document.documentElement.setAttribute('data-theme',s.theme)}catch(e){}</script>
 </head>
 <body>
 <div class="wrap">
@@ -437,6 +438,7 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
   });
 
   function renderAll() { renderUpdate(); renderHist(); }
+  var hs = location.hash.replace('#', ''); if (hs === 'add') tab('add'); else if (hs === 'history' || hs === 'hist') tab('hist');
   var g = $('n-group'); GROUPS.forEach(function (n) { var o = document.createElement('option'); o.textContent = n; g.appendChild(o); });
   var now = new Date(); $('asof').value = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
   renderAll();
