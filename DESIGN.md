@@ -101,6 +101,14 @@ Rules:
 - Prefer borders and background steps over shadows. Radii: 6px controls, 10px panels.
 - Touch targets are at least 44px on the iOS adaptation; the sidebar becomes a bottom tab bar.
 
+## Mobile (under 760px)
+
+- One column with 16px side gutters. The sidebar becomes a fixed bottom tab bar (Home, Accounts, History, Import, Update), 56px tall plus the safe-area inset, so it clears the iPhone home indicator.
+- Ledger rows keep freshness on mobile. Row one is name and balance; row two is the source badge on the left and the age dot on the right. Staleness is never hidden to save space.
+- Wide tables (month by month) scroll sideways inside their own container with the first column pinned. The page itself never scrolls sideways.
+- Inputs are 16px or larger so iOS does not zoom on focus. Buttons, chips and tabs are at least 36px tall, and primary actions (Update all, Save snapshot) are 44px.
+- The hero figure drops to 44px and the trend line spans the full width.
+
 ## Components
 
 - **Ledger row:** account name and institution on the left; balance (tabular, right-aligned) with source badge and age dot on the right. Inline edit on click. Hover is a subtle `surface-sunken` background.
@@ -128,6 +136,7 @@ No purple or neon gradients, no glow, no decorative blobs, no three-column icon 
 ## Open items
 
 - Confirm ₹ glyph and tabular numeral support in the chosen fonts (see Typography).
+- Test on a real iPhone: bottom bar clearance, date picker and decimal keyboard behaviour.
 - Decide the iOS type adaptation (SF Pro vs. the same families).
 - Decide how a saved view is created and edited (from the chip row or from settings).
 - Define chart styling for the net-worth line and group trends as the first Phase 1 chart is built.

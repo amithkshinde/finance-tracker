@@ -2,7 +2,7 @@
 <html lang="en-IN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Finance Tracker — Enter balances</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -68,7 +68,22 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
 .tools { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
 .hidden { display:none; }
 .note { margin-top:40px; font-size:12px; color:var(--muted); max-width:640px; }
-@media (max-width:700px) { .row { grid-template-columns:1fr 150px; } .row .last { display:none; } .grid { grid-template-columns:1fr; } }
+@media (max-width:700px) {
+  .wrap { padding: 20px 16px calc(32px + env(safe-area-inset-bottom)); }
+  header { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+  .tabs { margin: 16px -16px; padding: 0 8px; overflow-x: auto; }
+  .tab { white-space: nowrap; min-height: 44px; }
+  input, select { font-size: 16px; min-height: 44px; }
+  .btn { min-height: 44px; }
+  .row { grid-template-columns: 1fr 140px; gap: 12px; padding: 12px 4px; }
+  .row .last { display: none; }
+  .grid { grid-template-columns: 1fr; }
+  .sticky { padding: 12px 0 calc(12px + env(safe-area-inset-bottom)); }
+  .nw { font-size: 24px; }
+  .bar .field, .bar input { width: 100%; }
+  #hist { overflow-x: auto; }
+  #hist table { min-width: 620px; }
+}
 @media (prefers-reduced-motion:reduce) { * { transition:none !important; } }
 </style>
 </head>
@@ -85,7 +100,7 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
   <div class="tabs" role="tablist">
     <button class="tab" role="tab" id="t-update" aria-selected="true">Update balances</button>
     <button class="tab" role="tab" id="t-add" aria-selected="false">Add account</button>
-    <button class="tab" role="tab" id="t-hist" aria-selected="false">History and backup</button>
+    <button class="tab" role="tab" id="t-hist" aria-selected="false">History</button>
   </div>
 
   <section id="p-update" role="tabpanel">

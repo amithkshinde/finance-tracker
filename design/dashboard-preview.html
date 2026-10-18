@@ -2,7 +2,7 @@
 <html lang="en-IN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Finance Tracker — Dashboard preview</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -114,13 +114,36 @@ section { margin-top: 40px; }
 .age.red { color: var(--loss); }
 .none { margin-top: 40px; font-size: 13px; color: var(--muted); padding-bottom: 8px; border-bottom: 1px solid var(--border); }
 .sample { margin-top: 32px; font-size: 12px; color: var(--muted); }
+.scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.scroll table.hist { min-width: 620px; }
+table.hist td:first-child, table.hist th:first-child { position: sticky; left: 0; background: var(--bg); white-space: nowrap; }
 @media (max-width: 760px) {
+  body { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
   .app { grid-template-columns: 1fr; }
-  .side { display: none; }
-  .hero { flex-direction: column; align-items: flex-start; }
-  .row { grid-template-columns: 1fr auto; }
-  .row .badge, .row .age { display: none; }
+  .side {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; flex-direction: row; padding: 0 4px env(safe-area-inset-bottom);
+    background: var(--bg); border-right: 0; border-top: 1px solid var(--border); gap: 0;
+  }
+  .brand, .side .foot, .nav a.d { display: none; }
+  .nav { display: flex; width: 100%; }
+  .nav a { flex: 1; text-align: center; min-height: 56px; padding: 18px 2px 0; font-size: 12px; border-radius: 0; }
+  .top { padding: 10px 16px; gap: 12px; align-items: flex-start; font-size: 12px; }
+  .top button { min-height: 36px; flex: none; }
+  .wrap { padding: 24px 16px 32px; }
+  .hero { flex-direction: column; align-items: flex-start; gap: 16px; }
   .hero .fig { font-size: 44px; }
+  .spark { width: 100%; height: 64px; }
+  .chip { min-height: 36px; padding: 6px 14px; }
+  .stale { flex-wrap: wrap; }
+  .stale button { min-height: 44px; margin-left: 0; width: 100%; }
+  .head { flex-wrap: wrap; gap: 4px 12px; }
+  .head .basis { display: block; margin: 0; width: 100%; order: 3; }
+  .row { grid-template-columns: 1fr auto auto; gap: 4px 12px; padding: 14px 4px; }
+  .row > div:first-child { grid-column: 1; grid-row: 1; min-width: 0; }
+  .amt { grid-column: 2 / 4; grid-row: 1; }
+  .badge { grid-column: 1; grid-row: 2; }
+  .age { grid-column: 2 / 4; grid-row: 2; }
+  .snap { min-height: 36px; }
 }
 
 .alloc { padding: 24px 0; border-bottom: 1px solid var(--border); }
@@ -141,7 +164,7 @@ table.hist td { text-align: right; padding: 10px 8px; border-bottom: 1px solid v
 table.hist td:first-child { font-weight: 400; color: var(--muted); }
 table.hist tr:hover td { background: var(--sunken); }
 .snap { font: 500 13px var(--ui); color: var(--ink); background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 4px 12px; cursor: pointer; }
-@media (max-width: 760px) { .two { grid-template-columns: 1fr; gap: 0; } }
+@media (max-width: 760px) { .two { grid-template-columns: 1fr; gap: 40px; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
@@ -154,8 +177,9 @@ table.hist tr:hover td { background: var(--sunken); }
       <a href="#">Accounts</a>
       <a href="#">History</a>
       <a href="#">Import</a>
-      <a href="#">Connections</a>
-      <a href="#">Settings</a>
+      <a href="entry-form.html">Update</a>
+      <a class="d" href="#">Connections</a>
+      <a class="d" href="#">Settings</a>
     </nav>
     <div class="foot">Data stays on this Mac.<br>Last backup 3 days ago.</div>
   </aside>
@@ -255,7 +279,7 @@ table.hist tr:hover td { background: var(--sunken); }
 
       <section>
         <div class="head"><span class="label">Month by month</span><button class="snap" type="button">Take snapshot</button></div>
-        <table class="hist">
+        <div class="scroll"><table class="hist">
           <thead><tr><th>Month</th><th>Cash and bank</th><th>Investments</th><th>Fixed and retirement</th><th>Insurance</th><th>Net worth</th></tr></thead>
           <tbody>
             <tr><td>Oct 2026</td><td>₹68,500</td><td>₹1,34,100</td><td>₹3,30,000</td><td>₹8,78,000</td><td>₹14,10,600</td></tr>
@@ -263,7 +287,7 @@ table.hist tr:hover td { background: var(--sunken); }
             <tr><td>Aug 2026</td><td>₹64,800</td><td>₹1,29,500</td><td>₹3,30,000</td><td>₹8,78,000</td><td>₹14,02,300</td></tr>
             <tr><td>Jul 2026</td><td>₹61,200</td><td>₹1,28,900</td><td>₹3,30,000</td><td>₹8,78,000</td><td>₹13,98,100</td></tr>
           </tbody>
-        </table>
+        </table></div>
       </section>
 
       <div class="none">Liabilities · none recorded</div>
