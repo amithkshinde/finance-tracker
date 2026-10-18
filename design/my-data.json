@@ -62,7 +62,28 @@
    "group": "Fixed and retirement",
    "type": "RD",
    "basis": "Principal plus interest",
-   "due": ""
+   "due": "",
+   "rds": [
+    {
+     "no": 1,
+     "label": "ITR 2025",
+     "balance": 50214,
+     "maturity": null
+    },
+    {
+     "no": 2,
+     "label": "Phone",
+     "balance": 3814,
+     "maturity": "2027-06-21"
+    },
+    {
+     "no": 12,
+     "label": "Extra Money",
+     "balance": 37364,
+     "maturity": "2028-08-17"
+    }
+   ],
+   "note": "Flexible RD: no fixed monthly instalment"
   },
   {
    "id": "a8",

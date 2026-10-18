@@ -74,6 +74,7 @@
   var today = new Date().toISOString().slice(0, 10), items = [];
   FT.accounts().forEach(function (a) {
     if (a.due && a.due >= today) items.push({ d: a.due, n: a.name, s: a.type });
+    (a.rds || []).forEach(function (r) { if (r.maturity && r.maturity >= today) items.push({ d: r.maturity, n: a.name + ' · ' + r.label, s: FT.money(r.balance) + ' now, flexible deposits' }); });
     (a.fds || []).forEach(function (f) { if (f.maturity >= today) items.push({ d: f.maturity, n: a.name + ' · ending ' + f.last4, s: FT.money(f.maturityAmount) + ' at maturity, ' + f.rate + '% a year' }); });
   });
   items.sort(function (x, y) { return x.d < y.d ? -1 : 1; }); items = items.slice(0, 5);

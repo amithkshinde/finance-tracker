@@ -6,8 +6,11 @@
   if (!store && window.FT_SEED) { store = JSON.parse(JSON.stringify(window.FT_SEED)); try { localStorage.setItem('ft.v1', JSON.stringify(store)); } catch (e) {} }
   if (store && window.FT_SEED && Array.isArray(store.accounts)) {
     store.accounts.forEach(function (a) {
-      if (a.fds) return;
-      window.FT_SEED.accounts.forEach(function (sa) { if (sa.name === a.name && sa.fds) a.fds = sa.fds; });
+      window.FT_SEED.accounts.forEach(function (sa) {
+        if (sa.name !== a.name) return;
+        if (!a.fds && sa.fds) a.fds = sa.fds;
+        if (!a.rds && sa.rds) { a.rds = sa.rds; a.note = sa.note; }
+      });
     });
   }
   if (store && (!Array.isArray(store.accounts) || !Array.isArray(store.snaps))) store = null;
