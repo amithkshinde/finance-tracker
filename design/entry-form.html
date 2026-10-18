@@ -117,6 +117,7 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
 }
 @media (prefers-reduced-motion:reduce) { * { transition:none !important; } }
 </style>
+<script src="my-data.js"></script>
 <script>try{var s=JSON.parse(localStorage.getItem('ft.settings')||'{}');if(s.theme==='light'||s.theme==='dark')document.documentElement.setAttribute('data-theme',s.theme)}catch(e){}</script>
 </head>
 <body>
@@ -231,6 +232,7 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
 
   function load() {
     try { var s = localStorage.getItem(KEY); if (s) return JSON.parse(s); } catch (e) {}
+    if (window.FT_SEED) return JSON.parse(JSON.stringify(window.FT_SEED));
     return null;
   }
   var store = load() || { accounts: SEED.map(function (r, i) { return { id: 'a' + (i + 1), name: r[0], inst: r[1], group: GROUPS[r[2]], type: r[3], basis: r[4], due: '' }; }), snaps: [], next: 100 };
