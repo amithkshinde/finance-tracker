@@ -3609,5 +3609,302 @@
    }
   }
  ],
- "next": 132
+ "next": 132,
+ "statements": [
+  {
+   "month": "2021-09",
+   "amount": 1861.87,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2021-10",
+   "amount": 2000.0,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2021-11",
+   "amount": 5372.37,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2021-12",
+   "amount": 7173.48,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2022-01",
+   "amount": 7897.53,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2022-02",
+   "amount": 9421.82,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2022-03",
+   "amount": 9690.25,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2022-04",
+   "amount": 11580.44,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2022-05",
+   "amount": 25222.52,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2022-06",
+   "amount": 24382.67,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2022-07",
+   "amount": 27259.67,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2022-08",
+   "amount": 27637.57,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2022-09",
+   "amount": 27295.03,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2022-10",
+   "amount": 31320.73,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2022-11",
+   "amount": 33642.12,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2022-12",
+   "amount": 36212.06,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2023-01",
+   "amount": 36968.3,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2023-02",
+   "amount": 37294.6,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2023-03",
+   "amount": 48209.64,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2023-04",
+   "amount": 50795.61,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2023-05",
+   "amount": 55335.75,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2023-06",
+   "amount": 58408.41,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2023-07",
+   "amount": 63048.24,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2023-08",
+   "amount": 63978.85,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2023-09",
+   "amount": 68045.14,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2023-10",
+   "amount": 66733.05,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2023-11",
+   "amount": 71175.62,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2023-12",
+   "amount": 77499.69,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2024-01",
+   "amount": 82909.6,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2024-02",
+   "amount": 88000.45,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2024-03",
+   "amount": 88139.95,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2024-04",
+   "amount": 87376.74,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2024-05",
+   "amount": 89507.0,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2024-06",
+   "amount": 93762.81,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2024-07",
+   "amount": 103750.64,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2024-08",
+   "amount": 117811.6,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2024-09",
+   "amount": 120419.48,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2024-10",
+   "amount": 117662.68,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2024-11",
+   "amount": 120587.63,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2024-12",
+   "amount": 119444.55,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2025-01",
+   "amount": 120000.78,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2025-02",
+   "amount": 115306.13,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2025-03",
+   "amount": 124629.68,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2025-04",
+   "amount": 124629.68,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2025-05",
+   "amount": 131009.67,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2025-06",
+   "amount": 131009.67,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2025-07",
+   "amount": 137076.68,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2025-08",
+   "amount": 137922.77,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2025-09",
+   "amount": 145910.0,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2025-10",
+   "amount": 149579.15,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2025-11",
+   "amount": 152566.7,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2025-12",
+   "amount": 155189.28,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2026-01",
+   "amount": 157818.07,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2026-03",
+   "amount": 144104.38,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2026-04",
+   "amount": 152999.43,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2026-05",
+   "amount": 151329.51,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2026-06",
+   "amount": 160414.13,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2026-07",
+   "amount": 161725.19,
+   "source": "NSDL CAS"
+  },
+  {
+   "month": "2026-09",
+   "amount": 157315.02,
+   "source": "NSDL CAS"
+  }
+ ]
 }

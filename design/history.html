@@ -44,6 +44,7 @@
 <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted)" id="axis"></div>
 <div class="head"><span class="label">Month by month</span><span class="total"></span></div>
 <div class="scroll"><table><thead><tr><th>Month</th><th>Net worth</th><th>Change</th><th>Change %</th></tr></thead><tbody id="tb"></tbody></table></div>
+<div id="chk" class="hidden"><div class="head"><span class="label">Check against your NSDL statement</span><span class="total"></span></div><p class="sub" style="padding:8px 0">Your Investments (shares and mutual funds) against the total on the monthly consolidated statement. A gap over 5% is flagged. The statement may not include holdings kept at the other depository, such as Zerodha.</p><div class="scroll"><table><thead><tr><th>Month</th><th>You track</th><th>NSDL statement</th><th>Gap</th><th></th></tr></thead><tbody id="ctb"></tbody></table></div></div>
 <p class="note" id="hnote">Sample data. Changes are against the previous month. Green and red show gain and loss, and every figure also carries a sign.</p>
     </div>
   </div>
@@ -59,6 +60,10 @@ if(window.FT&&FT.live()){var mm=FT.months();S=mm.map(function(m){return m.net});
 function table(){var tb=document.getElementById('tb');tb.textContent='';for(var i=S.length-1;i>=0;i--){var tr=document.createElement('tr');var c=[M[i],'₹'+f.format(S[i])];var d=i?S[i]-S[i-1]:null;var td;c.forEach(function(t){td=document.createElement('td');td.textContent=t;tr.appendChild(td)});
 var x=document.createElement('td'),y=document.createElement('td');if(d==null){x.textContent='–';y.textContent='–'}else{var pc=S[i-1]?d/Math.abs(S[i-1])*100:0,cl=d>=0?'gain':'loss',sg=d>=0?'+':'−';x.className=y.className=cl;x.textContent=sg+'₹'+f.format(Math.abs(d));y.textContent=sg+Math.abs(pc).toFixed(1)+'%'}tr.appendChild(x);tr.appendChild(y);tb.appendChild(tr)}}
 table();
+if(window.FT&&FT.live()&&FT.statements().length){var cm={};FT.months().forEach(function(m){cm[m.key]=m});var cb=document.getElementById('ctb');var rows=FT.statements().filter(function(s){return cm[s.month]}).slice().reverse();rows.forEach(function(s){var m=cm[s.month],tr=document.createElement('tr'),tr0=m.groups['Investments']||0,gap=tr0-s.amount,pc=s.amount?gap/s.amount*100:0;
+[m.label,'₹'+FT.num(tr0),'₹'+FT.num(s.amount),(gap>=0?'+':'−')+'₹'+FT.num(Math.abs(gap))].forEach(function(t){var td=document.createElement('td');td.textContent=t;tr.appendChild(td)});
+var fl=document.createElement('td');if(Math.abs(pc)>5){fl.textContent='Check';fl.style.color='var(--amber)'}tr.appendChild(fl);cb.appendChild(tr)});
+if(rows.length)document.getElementById('chk').classList.remove('hidden')}
 function draw(){if(S.length<2){document.getElementById('svg').style.display='none';document.getElementById('big').textContent='₹'+f.format(S[S.length-1]||0);document.getElementById('chg').textContent='Save a snapshot next month to see how it changes.';document.getElementById('axis').textContent='';return}
 var v=S.slice(-n),m=M.slice(-n),mn=Math.min.apply(0,v),mx=Math.max.apply(0,v),pad=(mx-mn)*0.15||1,lo=mn-pad,hi=mx+pad;
 var d=v.map(function(x,i){return(i?'L':'M')+(i*600/(v.length-1)).toFixed(1)+' '+(180-(x-lo)/(hi-lo)*160).toFixed(1)}).join(' ');document.getElementById('ln').setAttribute('d',d);

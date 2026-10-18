@@ -13,11 +13,13 @@
       });
     });
   }
+  if (store && window.FT_SEED && !store.statements && window.FT_SEED.statements) store.statements = window.FT_SEED.statements;
   if (store && (!Array.isArray(store.accounts) || !Array.isArray(store.snaps))) store = null;
   var f0 = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }), f2 = new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   var FT = {
     GROUPS: GROUPS,
+    statements: function () { return (store && store.statements) || []; },
     live: function () { return !!(store && store.snaps.length); },
     accounts: function () { return store ? store.accounts.filter(function (a) { return !a.archived; }) : []; },
     sign: function (a) { return a.group === 'Liabilities' ? -1 : 1; },
