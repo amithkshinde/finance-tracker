@@ -22,7 +22,15 @@
   --accent:#8FB0E0; --accent-soft:#1F2B3B; --gain:#5BBE91; --loss:#E07A72; --amber:#D9A441; }
 * { box-sizing:border-box; margin:0; }
 body { background:var(--bg); color:var(--ink); font:400 15px/1.5 var(--ui); font-variant-numeric:tabular-nums lining-nums; -webkit-font-smoothing:antialiased; }
-.wrap { max-width:960px; margin:0 auto; padding:32px 24px 96px; }
+.app { display:grid; grid-template-columns:232px 1fr; min-height:100vh; }
+.side { border-right:1px solid var(--border); padding:24px 16px; display:flex; flex-direction:column; gap:4px; }
+.brand { font-weight:600; font-size:15px; padding:0 12px 24px; letter-spacing:.01em; }
+.nav a { display:block; padding:8px 12px; border-radius:6px; color:var(--muted); text-decoration:none; font-size:14px; transition:background var(--fast) var(--ease); }
+.nav a:hover { background:var(--sunken); }
+.nav a.on { background:var(--accent-soft); color:var(--accent); font-weight:500; }
+.side .foot { margin-top:auto; padding:12px; font-size:12px; color:var(--muted); }
+.main { min-width:0; }
+.wrap { max-width:960px; padding:32px 32px 96px; }
 header { display:flex; justify-content:space-between; align-items:center; margin-bottom:32px; }
 header a { color:var(--muted); text-decoration:none; font-size:14px; }
 header a:hover { color:var(--ink); }
@@ -74,6 +82,13 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
 .imp ul { margin:8px 0 0 18px; padding:0; color:var(--muted); font-size:13px; }
 .note { margin-top:40px; font-size:12px; color:var(--muted); max-width:640px; }
 @media (max-width:700px) {
+  body { padding-bottom:calc(64px + env(safe-area-inset-bottom)); }
+  .app { grid-template-columns:1fr; }
+  .side { position:fixed; left:0; right:0; bottom:0; z-index:10; flex-direction:row; padding:0 4px env(safe-area-inset-bottom); background:var(--bg); border-right:0; border-top:1px solid var(--border); gap:0; }
+  .brand, .side .foot { display:none; }
+  .nav { display:flex; width:100%; overflow-x:auto; }
+  .nav a { flex:0 0 auto; min-width:76px; text-align:center; min-height:56px; padding:18px 8px 0; font-size:12px; border-radius:0; }
+  .sticky { bottom:calc(56px + env(safe-area-inset-bottom)); }
   .wrap { padding: 20px 16px calc(32px + env(safe-area-inset-bottom)); }
   header { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
   .tabs { margin: 16px -16px; padding: 0 8px; overflow-x: auto; }
@@ -94,13 +109,28 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
 <script>try{var s=JSON.parse(localStorage.getItem('ft.settings')||'{}');if(s.theme==='light'||s.theme==='dark')document.documentElement.setAttribute('data-theme',s.theme)}catch(e){}</script>
 </head>
 <body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">Finance Tracker</div>
+    <nav class="nav" aria-label="Main">
+      <a href="dashboard-preview.html">Home</a>
+      <a href="accounts.html">Accounts</a>
+      <a href="history.html">History</a>
+      <a href="import.html">Import</a>
+      <a class="on" aria-current="page" href="entry-form.html">Update</a>
+      <a href="connections.html">Connections</a>
+      <a href="settings.html">Settings</a>
+    </nav>
+    <div class="foot">Data stays on this Mac.<br>Last backup 3 days ago.</div>
+  </aside>
+  <div class="main">
 <div class="wrap">
   <header>
     <div>
       <h1>Enter balances</h1>
       <p class="sub">Type only what changed. Press Enter to move to the next account. Everything stays in this browser.</p>
     </div>
-    <div><a href="dashboard-preview.html">Dashboard preview</a> · <a href="#" id="theme">Theme</a></div>
+    <div><a href="#" id="theme">Theme</a></div>
   </header>
 
   <div class="tabs" role="tablist">
@@ -166,6 +196,8 @@ th:first-child, td:first-child { text-align:left; } td:first-child { color:var(-
   </section>
 
   <p class="note">This page holds no data of its own. What you type is saved in this browser on this device only, and is never sent anywhere. Export a backup from the third tab regularly, because clearing browser data erases it. Liabilities are entered as positive amounts and subtracted from net worth.</p>
+</div>
+  </div>
 </div>
 <script>
 (function () {
