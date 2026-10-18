@@ -62,9 +62,10 @@ Every account belongs to one of four groups. Net worth = assets minus liabilitie
 
 | Group | Account types | How value is determined |
 | --- | --- | --- |
-| Cash and bank | Savings, salary, current, wallets (Paytm, PhonePe), cash in hand | Balance |
+| Cash and bank | Several savings accounts, wallets (Paytm, PhonePe, Pockets), Digital Rupee (e₹), cash in hand | Balance |
 | Investments | Mutual funds (SIP and lump sum), stocks and ETFs, bonds, gold (physical, SGB, digital), crypto, real estate (manual) | Units × latest price, or manual value |
-| Fixed and retirement | FD, RD, PPF, EPF, NPS, post office schemes, insurance with surrender value | Principal plus accrued interest, or latest statement |
+| Fixed and retirement | Multiple FDs, RD, PPF, EPF, NPS (Tier 1 and Tier 2), post office schemes | Principal plus accrued interest, or latest statement |
+| Insurance and policies | Life insurance and pension policies (LIC and others) | A per-policy valuation basis: premiums paid, surrender value or maturity value. The basis is shown next to the group total |
 | Liabilities | Credit cards, home/car/personal loans, EMIs, money owed to others | Outstanding principal and next due date |
 
 **Core entities**
@@ -79,7 +80,7 @@ Every account belongs to one of four groups. Net worth = assets minus liabilitie
 | Goal | name, target ₹, target date, linked accounts |
 | Source connection | provider, status, last successful sync, consent expiry |
 
-Balances are stored as snapshots, never overwritten. This gives net-worth history, makes manual and automatic updates the same operation, and lets the app show stale data honestly.
+Each account has its own value and each group has a subtotal; net worth is the sum of the groups. The Liabilities group appears only when something is recorded, otherwise one quiet line says none. Balances are stored as snapshots, never overwritten. This gives net-worth history, makes manual and automatic updates the same operation, and lets the app show stale data honestly.
 
 ## 4. Features
 
@@ -96,9 +97,13 @@ P0 is the v1 release, P1 follows within the next two releases, P2 is later.
 | Statement import | Drag and drop CSV, XLSX or PDF statements. Column mapping is remembered per bank. Duplicates detected by date, amount and reference |
 | Net-worth history | Line chart over time built from snapshots, with 1M, 6M, 1Y and All views |
 | Staleness alerts | Amber after 7 days for synced accounts and 35 days for manual ones, red after 60 |
+| Spreadsheet import | Bring in an existing Google Sheet or CSV, including years of past totals, so history starts on day one. Maps its rows to accounts and its dated columns to snapshots, with a preview |
+| Saved views | Named net-worth views that exclude chosen accounts or groups (for example "without savings" or "without one policy"), switchable on the dashboard with a chip |
 | Search and filter | Find any account or transaction by name, amount, date or tag |
 | Local-first storage | All data on the device, encrypted at rest, with one-click export to CSV and JSON backup |
 | App lock | Passcode or biometric (Touch ID on Mac, Windows Hello) after idle |
+
+Spreadsheet import and saved views come from how the first user already tracks money in a sheet, so they are P0.
 
 **P1: make it effortless**
 
@@ -252,5 +257,6 @@ Each phase ends with a check you can run yourself. Durations are rough and assum
 - [ ] 4. Do you want single-device only, or desktop and iPhone sharing one store from the start?
 - [ ] 5. Do you hold foreign assets, crypto or ESOPs that need ₹ conversion rules?
 - [ ] 6. Should the dashboard show lakh/crore shorthand by default?
+- [ ] 7. For insurance policies, should the value be premiums paid or surrender value? The data model supports both; the default affects net worth.
 
 Sources: the data-ingestion options reflect general knowledge of India's financial data ecosystem and have not been verified against live provider documentation; confirm AA provider terms, AMFI file access and broker API pricing before building.
