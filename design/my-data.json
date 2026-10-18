@@ -3918,5 +3918,25 @@
    "amount": 157315.02,
    "source": "NSDL CAS"
   }
+ ],
+ "views": [
+  {
+   "name": "Without SB",
+   "exclude": [
+    "a18",
+    "a19",
+    "a20",
+    "a21",
+    "a22",
+    "a23",
+    "a24"
+   ]
+  },
+  {
+   "name": "Without LIC Smart Pension",
+   "exclude": [
+    "a32"
+   ]
+  }
  ]
 }

@@ -40,19 +40,45 @@
       best.d = ent || latest; return best;
     },
     latestDate: function () { var d = ''; store.snaps.forEach(function (s) { if (s.date > d) d = s.date; }); return d; },
-    groupsAt: function (date) {
-      var g = {}; store.accounts.forEach(function (a) { var l = FT.last(a.id, date); g[a.group] = (g[a.group] || 0) + (l ? l.v : 0); }); return g;
+    store: function () { return store; },
+    save: function () { try { localStorage.setItem('ft.v1', JSON.stringify(store)); return true; } catch (e) { return false; } },
+    account: function (id) { return store.accounts.filter(function (a) { return a.id === id; })[0]; },
+    setValue: function (id, date, n) {
+      var s = store.snaps.filter(function (x) { return x.date === date; })[0];
+      if (!s) { s = { date: date, values: {}, entered: {} }; store.snaps.push(s); store.accounts.forEach(function (a) { var l = FT.last(a.id, date); if (l) s.values[a.id] = l.v; }); }
+      s.values[id] = n; (s.entered = s.entered || {})[id] = 1; return FT.save();
     },
-    netAt: function (date) { var n = 0; store.accounts.forEach(function (a) { var l = FT.last(a.id, date); if (l) n += FT.sign(a) * l.v; }); return n; },
-    months: function () {
+    views: function () {
+      try { var v = JSON.parse(localStorage.getItem('ft.views')); if (Array.isArray(v)) return v; } catch (e) {}
+      return (window.FT_SEED && window.FT_SEED.views) ? JSON.parse(JSON.stringify(window.FT_SEED.views)) : [];
+    },
+    saveViews: function (v) { try { localStorage.setItem('ft.views', JSON.stringify(v)); } catch (e) {} },
+    currentView: function () {
+      var n = null; try { n = localStorage.getItem('ft.view'); } catch (e) {}
+      if (!n) return null; return FT.views().filter(function (v) { return v.name === n; })[0] || null;
+    },
+    setView: function (name) { try { if (name) localStorage.setItem('ft.view', name); else localStorage.removeItem('ft.view'); } catch (e) {} },
+    exSet: function (view) { var o = {}; if (view) view.exclude.forEach(function (id) { o[id] = 1; }); return o; },
+    tier: function (a) {
+      var t = a.type;
+      if (['Savings', 'Wallet', 'Digital Rupee', 'Cash'].indexOf(t) > -1) return 'now';
+      if (['Shares', 'Mutual funds'].indexOf(t) > -1) return 'sell';
+      if (['FD', 'RD', 'PPF', 'NPS', 'Insurance policy'].indexOf(t) > -1) return 'locked';
+      return a.group === 'Cash and bank' ? 'now' : a.group === 'Investments' ? 'sell' : 'locked';
+    },
+    groupsAt: function (date, ex) {
+      var g = {}; store.accounts.forEach(function (a) { if (ex && ex[a.id]) return; var l = FT.last(a.id, date); g[a.group] = (g[a.group] || 0) + (l ? l.v : 0); }); return g;
+    },
+    netAt: function (date, ex) { var n = 0; store.accounts.forEach(function (a) { if (ex && ex[a.id]) return; var l = FT.last(a.id, date); if (l) n += FT.sign(a) * l.v; }); return n; },
+    months: function (ex) {
       var by = {}; store.snaps.forEach(function (s) { var k = s.date.slice(0, 7); if (!by[k] || s.date > by[k]) by[k] = s.date; });
-      return Object.keys(by).sort().map(function (k) { var d = by[k]; return { key: k, date: d, label: MON[+k.slice(5, 7) - 1] + ' ' + k.slice(0, 4), net: FT.netAt(d), groups: FT.groupsAt(d) }; });
+      return Object.keys(by).sort().map(function (k) { var d = by[k]; return { key: k, date: d, label: MON[+k.slice(5, 7) - 1] + ' ' + k.slice(0, 4), net: FT.netAt(d, ex), groups: FT.groupsAt(d, ex) }; });
     },
     ageDays: function (d) { var t = new Date(); t.setHours(0, 0, 0, 0); var x = new Date(d + 'T00:00:00'); return Math.max(0, Math.round((t - x) / 864e5)); },
     settings: function () { var s = {}; try { s = JSON.parse(localStorage.getItem('ft.settings') || '{}'); } catch (e) {} return { synced: +s.synced || 7, manual: +s.manual || 35, red: +s.red || 60, short: !!s.short }; },
     sev: function (days) { var c = FT.settings(); return days > c.red ? 'red' : days > c.manual ? 'amber' : ''; },
-    rows: function () {
-      return FT.accounts().map(function (a) { var l = FT.last(a.id); return { a: a, v: l ? l.v : null, d: l ? l.d : null, age: l ? FT.ageDays(l.d) : null }; });
+    rows: function (ex, withArchived) {
+      return (withArchived ? store.accounts : FT.accounts()).filter(function (a) { return !(ex && ex[a.id]); }).map(function (a) { var l = FT.last(a.id); return { a: a, v: l ? l.v : null, d: l ? l.d : null, age: l ? FT.ageDays(l.d) : null }; });
     },
     premiumText: function (a) {
       if (!a.premium) return '';
