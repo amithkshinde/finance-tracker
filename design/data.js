@@ -4,6 +4,12 @@
   var store = null;
   try { var raw = localStorage.getItem('ft.v1'); if (raw) store = JSON.parse(raw); } catch (e) { store = null; }
   if (!store && window.FT_SEED) { store = JSON.parse(JSON.stringify(window.FT_SEED)); try { localStorage.setItem('ft.v1', JSON.stringify(store)); } catch (e) {} }
+  if (store && window.FT_SEED && Array.isArray(store.accounts)) {
+    store.accounts.forEach(function (a) {
+      if (a.fds) return;
+      window.FT_SEED.accounts.forEach(function (sa) { if (sa.name === a.name && sa.fds) a.fds = sa.fds; });
+    });
+  }
   if (store && (!Array.isArray(store.accounts) || !Array.isArray(store.snaps))) store = null;
   var f0 = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }), f2 = new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

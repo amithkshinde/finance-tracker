@@ -71,11 +71,16 @@
     bt.style.cssText = 'margin-left:auto;font:500 13px var(--ui);background:var(--accent);color:#fff;border-radius:6px;padding:8px 14px;text-decoration:none;white-space:nowrap'; st.appendChild(bt);
   } else { st.style.display = 'none'; }
   // coming up (dates the user added)
-  var today = new Date().toISOString().slice(0, 10), up = FT.accounts().filter(function (a) { return a.due && a.due >= today; }).sort(function (a, b) { return a.due < b.due ? -1 : 1; }).slice(0, 5);
+  var today = new Date().toISOString().slice(0, 10), items = [];
+  FT.accounts().forEach(function (a) {
+    if (a.due && a.due >= today) items.push({ d: a.due, n: a.name, s: a.type });
+    (a.fds || []).forEach(function (f) { if (f.maturity >= today) items.push({ d: f.maturity, n: a.name + ' · ending ' + f.last4, s: FT.money(f.maturityAmount) + ' at maturity, ' + f.rate + '% a year' }); });
+  });
+  items.sort(function (x, y) { return x.d < y.d ? -1 : 1; }); items = items.slice(0, 5);
   var two = $('twosec'); two.textContent = '';
-  if (up.length) {
+  if (items.length) {
     two.style.display = 'block'; var hd = el('div', 'head'); hd.appendChild(el('span', 'label', 'Coming up')); hd.appendChild(el('span', 'total')); two.appendChild(hd);
-    up.forEach(function (a) { var it = el('div', 'item'), l = el('div'); l.appendChild(document.createTextNode(a.name)); l.appendChild(el('div', 'sub', a.type)); it.appendChild(l); it.appendChild(el('span', 'when', FT.fmtDate(a.due))); two.appendChild(it); });
+    items.forEach(function (x) { var it = el('div', 'item'), l = el('div'); l.appendChild(document.createTextNode(x.n)); l.appendChild(el('div', 'sub', x.s)); it.appendChild(l); it.appendChild(el('span', 'when', FT.fmtDate(x.d))); two.appendChild(it); });
   } else two.style.display = 'none';
   // history
   var hs = $('histsec'), tb = hs.querySelector('tbody'), thr = hs.querySelector('thead tr');

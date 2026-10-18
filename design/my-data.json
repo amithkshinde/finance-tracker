@@ -101,7 +101,36 @@
    "group": "Fixed and retirement",
    "type": "FD",
    "basis": "Principal plus interest",
-   "due": ""
+   "due": "",
+   "fds": [
+    {
+     "no": 1,
+     "last4": "2558",
+     "start": "2023-03-13",
+     "amount": 30887,
+     "rate": 7,
+     "maturity": "2029-03-13",
+     "maturityAmount": 37301
+    },
+    {
+     "no": 2,
+     "last4": "2559",
+     "start": "2023-03-13",
+     "amount": 30896,
+     "rate": 7,
+     "maturity": "2028-03-13",
+     "maturityAmount": 35369
+    },
+    {
+     "no": 3,
+     "last4": "2560",
+     "start": "2026-03-13",
+     "amount": 12355,
+     "rate": 7,
+     "maturity": "2029-03-13",
+     "maturityAmount": 14920
+    }
+   ]
   },
   {
    "id": "a12",
@@ -120,7 +149,18 @@
    "group": "Fixed and retirement",
    "type": "FD",
    "basis": "Principal plus interest",
-   "due": ""
+   "due": "",
+   "fds": [
+    {
+     "no": 5,
+     "last4": "4327",
+     "start": "2021-06-23",
+     "amount": 26974,
+     "rate": 6.25,
+     "maturity": "2026-06-22",
+     "maturityAmount": 28700
+    }
+   ]
   },
   {
    "id": "a14",
@@ -129,7 +169,18 @@
    "group": "Fixed and retirement",
    "type": "FD",
    "basis": "Principal plus interest",
-   "due": ""
+   "due": "",
+   "fds": [
+    {
+     "no": 6,
+     "last4": "5660",
+     "start": "2021-10-04",
+     "amount": 44434,
+     "rate": 6.8,
+     "maturity": "2025-10-04",
+     "maturityAmount": 47277
+    }
+   ]
   },
   {
    "id": "a15",
@@ -139,7 +190,18 @@
    "type": "FD",
    "basis": "Principal plus interest",
    "due": "",
-   "archived": true
+   "archived": true,
+   "fds": [
+    {
+     "no": 4,
+     "last4": "2768",
+     "start": "2023-05-23",
+     "amount": 0,
+     "rate": 7,
+     "maturity": "2026-05-23",
+     "maturityAmount": 0
+    }
+   ]
   },
   {
    "id": "a16",
