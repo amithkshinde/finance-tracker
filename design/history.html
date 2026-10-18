@@ -42,7 +42,7 @@
 </svg>
 <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted)" id="axis"></div>
 <div class="head"><span class="label">Month by month</span><span class="total"></span></div>
-<div class="scroll"><table><thead><tr><th>Month</th><th>Net worth</th><th>Change</th><th>Change %%</th></tr></thead><tbody id="tb"></tbody></table></div>
+<div class="scroll"><table><thead><tr><th>Month</th><th>Net worth</th><th>Change</th><th>Change %</th></tr></thead><tbody id="tb"></tbody></table></div>
 <p class="note" id="hnote">Sample data. Changes are against the previous month. Green and red show gain and loss, and every figure also carries a sign.</p>
     </div>
   </div>
@@ -51,6 +51,7 @@
 function toast(t){var e=document.createElement('div');e.className='toast';e.setAttribute('role','status');e.textContent=t;document.body.appendChild(e);setTimeout(function(){e.remove()},2200)}
 function cfg(){try{return JSON.parse(localStorage.getItem('ft.settings')||'{}')}catch(e){return {}}}
 function setcfg(o){try{localStorage.setItem('ft.settings',JSON.stringify(Object.assign(cfg(),o)))}catch(e){}}
+(function(){var st=document.querySelector('.top strong');if(st&&window.FT&&FT.live()&&st.textContent.indexOf('₹')>-1)st.textContent=FT.money(FT.netAt(FT.latestDate()))})();
 document.getElementById('theme').addEventListener('click',function(){var r=document.documentElement;var dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);var n=dark?'light':'dark';r.setAttribute('data-theme',n);setcfg({theme:n})});
 var S=[1305000, 1312400, 1308000, 1326500, 1331000, 1352000, 1370000, 1384000, 1398100, 1402300, 1406700, 1410600],M=["Nov 2025", "Dec 2025", "Jan 2026", "Feb 2026", "Mar 2026", "Apr 2026", "May 2026", "Jun 2026", "Jul 2026", "Aug 2026", "Sep 2026", "Oct 2026"],f=new Intl.NumberFormat('en-IN'),n=12;
 if(window.FT&&FT.live()){var mm=FT.months();S=mm.map(function(m){return m.net});M=mm.map(function(m){return m.label});f={format:function(x){return FT.num(x)}};document.getElementById('hnote').textContent='Your data, saved only in this browser. Changes are against the previous month.'}

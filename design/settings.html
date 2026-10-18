@@ -50,6 +50,7 @@
 function toast(t){var e=document.createElement('div');e.className='toast';e.setAttribute('role','status');e.textContent=t;document.body.appendChild(e);setTimeout(function(){e.remove()},2200)}
 function cfg(){try{return JSON.parse(localStorage.getItem('ft.settings')||'{}')}catch(e){return {}}}
 function setcfg(o){try{localStorage.setItem('ft.settings',JSON.stringify(Object.assign(cfg(),o)))}catch(e){}}
+(function(){var st=document.querySelector('.top strong');if(st&&window.FT&&FT.live()&&st.textContent.indexOf('₹')>-1)st.textContent=FT.money(FT.netAt(FT.latestDate()))})();
 document.getElementById('theme').addEventListener('click',function(){var r=document.documentElement;var dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);var n=dark?'light':'dark';r.setAttribute('data-theme',n);setcfg({theme:n})});
 var D={theme:'system',short:false,synced:7,manual:35,red:60,month:true,mat:true,lock:true,idle:'5'};
 var s=Object.assign({},D,cfg());

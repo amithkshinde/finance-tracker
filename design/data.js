@@ -28,9 +28,9 @@
     },
     latestDate: function () { var d = ''; store.snaps.forEach(function (s) { if (s.date > d) d = s.date; }); return d; },
     groupsAt: function (date) {
-      var g = {}; FT.accounts().forEach(function (a) { var l = FT.last(a.id, date); g[a.group] = (g[a.group] || 0) + (l ? l.v : 0); }); return g;
+      var g = {}; store.accounts.forEach(function (a) { var l = FT.last(a.id, date); g[a.group] = (g[a.group] || 0) + (l ? l.v : 0); }); return g;
     },
-    netAt: function (date) { var n = 0; FT.accounts().forEach(function (a) { var l = FT.last(a.id, date); if (l) n += FT.sign(a) * l.v; }); return n; },
+    netAt: function (date) { var n = 0; store.accounts.forEach(function (a) { var l = FT.last(a.id, date); if (l) n += FT.sign(a) * l.v; }); return n; },
     months: function () {
       var by = {}; store.snaps.forEach(function (s) { var k = s.date.slice(0, 7); if (!by[k] || s.date > by[k]) by[k] = s.date; });
       return Object.keys(by).sort().map(function (k) { var d = by[k]; return { key: k, date: d, label: MON[+k.slice(5, 7) - 1] + ' ' + k.slice(0, 4), net: FT.netAt(d), groups: FT.groupsAt(d) }; });
