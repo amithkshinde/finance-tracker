@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finance Tracker — Enter balances</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F7F5F0; --surface:#FFFFFF; --sunken:#EFECE5; --border:#E2DED4; --ink:#1B1F23; --muted:#5E656C;
+  --accent:#34527A; --accent-soft:#E4EAF2; --gain:#2E7D5B; --loss:#B4443C; --amber:#B7791F;
+  --ui:"IBM Plex Sans",-apple-system,"SF Pro Text",system-ui,sans-serif; --serif:"Source Serif 4","New York",Georgia,serif;
+  --fast:120ms; --ease:cubic-bezier(0.2,0,0,1);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg:#14171A; --surface:#1C2024; --sunken:#101316; --border:#2A2F35; --ink:#ECE9E2; --muted:#9AA1A8;
+  --accent:#8FB0E0; --accent-soft:#1F2B3B; --gain:#5BBE91; --loss:#E07A72; --amber:#D9A441; } }
+:root[data-theme="dark"] {
+  --bg:#14171A; --surface:#1C2024; --sunken:#101316; --border:#2A2F35; --ink:#ECE9E2; --muted:#9AA1A8;
+  --accent:#8FB0E0; --accent-soft:#1F2B3B; --gain:#5BBE91; --loss:#E07A72; --amber:#D9A441; }
+* { box-sizing:border-box; margin:0; }
+body { background:var(--bg); color:var(--ink); font:400 15px/1.5 var(--ui); font-variant-numeric:tabular-nums lining-nums; -webkit-font-smoothing:antialiased; }
+.wrap { max-width:960px; margin:0 auto; padding:32px 24px 96px; }
+header { display:flex; justify-content:space-between; align-items:center; margin-bottom:32px; }
+header a { color:var(--muted); text-decoration:none; font-size:14px; }
+header a:hover { color:var(--ink); }
+h1 { font:600 22px/1.25 var(--ui); }
+.sub { color:var(--muted); font-size:13px; margin-top:4px; }
+.tabs { display:flex; gap:8px; margin:24px 0; border-bottom:1px solid var(--border); }
+.tab { font:500 14px var(--ui); background:none; border:0; padding:8px 12px; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; }
+.tab[aria-selected="true"] { color:var(--accent); border-color:var(--accent); }
+.label { font-size:13px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+.bar { display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end; justify-content:space-between; margin-bottom:8px; }
+.field { display:flex; flex-direction:column; gap:4px; }
+.field label { font-size:12px; color:var(--muted); }
+input, select { font:400 15px var(--ui); color:var(--ink); background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:8px 10px; min-height:36px; font-variant-numeric:tabular-nums lining-nums; }
+input:focus, select:focus { outline:2px solid var(--accent); outline-offset:1px; }
+.btn { font:500 14px var(--ui); border-radius:6px; padding:8px 14px; cursor:pointer; border:1px solid var(--border); background:transparent; color:var(--ink); transition:opacity var(--fast) var(--ease); }
+.btn.primary { background:var(--accent); color:#fff; border-color:transparent; }
+:root[data-theme="dark"] .btn.primary { color:#14171A; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.primary { color:#14171A; } }
+.btn:hover { opacity:.88; }
+.head { display:flex; justify-content:space-between; align-items:baseline; padding-bottom:8px; border-bottom:1px solid var(--ink); margin-top:32px; }
+.head .total { font-weight:500; }
+.row { display:grid; grid-template-columns:1fr 160px 190px; gap:16px; align-items:center; padding:10px 8px; border-bottom:1px solid var(--border); }
+.row:hover { background:var(--sunken); }
+.row .name { font-weight:500; }
+.row .inst { font-size:12px; color:var(--muted); }
+.row .last { font-size:12px; color:var(--muted); text-align:right; }
+.row input { width:100%; text-align:right; }
+.amtwrap { position:relative; }
+.amtwrap span { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
+.amtwrap input { padding-left:24px; }
+.sticky { position:sticky; bottom:0; background:var(--bg); border-top:1px solid var(--border); padding:16px 0; margin-top:32px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
+.nw { font:500 28px/1.1 var(--serif); }
+.msg { font-size:13px; color:var(--muted); min-height:20px; }
+.msg.ok { color:var(--gain); }
+.msg.err { color:var(--loss); }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:640px; }
+.grid .full { grid-column:1/-1; }
+.help { font-size:12px; color:var(--muted); }
+table { width:100%; border-collapse:collapse; font-size:14px; margin-top:8px; }
+th { text-align:right; font-size:12px; font-weight:600; color:var(--muted); padding:8px; }
+td { text-align:right; padding:10px 8px; border-bottom:1px solid var(--border); font-weight:500; }
+th:first-child, td:first-child { text-align:left; } td:first-child { color:var(--muted); font-weight:400; }
+.tools { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
+.hidden { display:none; }
+.note { margin-top:40px; font-size:12px; color:var(--muted); max-width:640px; }
+@media (max-width:700px) { .row { grid-template-columns:1fr 150px; } .row .last { display:none; } .grid { grid-template-columns:1fr; } }
+@media (prefers-reduced-motion:reduce) { * { transition:none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Enter balances</h1>
+      <p class="sub">Type only what changed. Press Enter to move to the next account. Everything stays in this browser.</p>
+    </div>
+    <div><a href="dashboard-preview.html">Dashboard preview</a> · <a href="#" id="theme">Theme</a></div>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="t-update" aria-selected="true">Update balances</button>
+    <button class="tab" role="tab" id="t-add" aria-selected="false">Add account</button>
+    <button class="tab" role="tab" id="t-hist" aria-selected="false">History and backup</button>
+  </div>
+
+  <section id="p-update" role="tabpanel">
+    <div class="bar">
+      <div class="field"><label for="asof">As of</label><input type="date" id="asof"></div>
+      <div class="help">Leave a field blank to keep its last value. Amounts accept commas, for example 1,25,000.50.</div>
+    </div>
+    <div id="groups"></div>
+    <div class="sticky">
+      <div><div class="label">Net worth</div><div class="nw" id="nw">₹0</div></div>
+      <div style="text-align:right">
+        <div class="msg" id="msg" role="status"></div>
+        <button class="btn primary" id="save" type="button">Save snapshot</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="p-add" role="tabpanel" class="hidden">
+    <form id="addform" class="grid" autocomplete="off">
+      <div class="field full"><label for="n-name">Account name</label><input id="n-name" required placeholder="For example, HDFC Savings"></div>
+      <div class="field"><label for="n-inst">Institution</label><input id="n-inst" placeholder="For example, HDFC Bank"></div>
+      <div class="field"><label for="n-group">Group</label>
+        <select id="n-group"></select></div>
+      <div class="field"><label for="n-type">Type</label>
+        <select id="n-type"><option>Savings</option><option>Wallet</option><option>Digital Rupee</option><option>Cash</option><option>Shares</option><option>Mutual funds</option><option>FD</option><option>RD</option><option>PPF</option><option>EPF</option><option>NPS</option><option>Insurance policy</option><option>Loan</option><option>Credit card</option><option>Other</option></select></div>
+      <div class="field"><label for="n-basis">Value basis</label>
+        <select id="n-basis"><option>Balance</option><option>Market value</option><option>Principal plus interest</option><option>Premiums paid</option><option>Surrender value</option><option>Maturity value</option><option>Outstanding amount</option></select></div>
+      <div class="field"><label for="n-opening">Opening balance (optional)</label><input id="n-opening" inputmode="decimal" placeholder="0"></div>
+      <div class="field"><label for="n-date">Maturity or due date (optional)</label><input type="date" id="n-date"></div>
+      <div class="full"><button class="btn primary" type="submit">Add account</button> <span class="msg" id="addmsg" role="status"></span></div>
+    </form>
+  </section>
+
+  <section id="p-hist" role="tabpanel" class="hidden">
+    <div class="head"><span class="label">Snapshots</span></div>
+    <div id="hist"></div>
+    <div class="tools">
+      <button class="btn" id="exp-csv" type="button">Export CSV</button>
+      <button class="btn" id="exp-json" type="button">Export backup (JSON)</button>
+      <button class="btn" id="imp" type="button">Restore backup</button>
+      <input type="file" id="impfile" accept="application/json" class="hidden">
+      <button class="btn" id="wipe" type="button">Erase all data</button>
+    </div>
+    <div class="msg" id="histmsg" role="status" style="margin-top:12px"></div>
+  </section>
+
+  <p class="note">This page holds no data of its own. What you type is saved in this browser on this device only, and is never sent anywhere. Export a backup from the third tab regularly, because clearing browser data erases it. Liabilities are entered as positive amounts and subtracted from net worth.</p>
+</div>
+<script>
+(function () {
+  var KEY = 'ft.v1';
+  var GROUPS = ['Cash and bank', 'Investments', 'Fixed and retirement', 'Insurance and policies', 'Liabilities'];
+  var SEED = [
+    ['ICICI Savings','ICICI Bank',0,'Savings','Balance'],['SBI Savings','State Bank of India',0,'Savings','Balance'],
+    ['HDFC Savings','HDFC Bank',0,'Savings','Balance'],['Pockets','Wallet',0,'Wallet','Balance'],['Digital Rupee','e₹ wallet',0,'Digital Rupee','Balance'],
+    ['Shares · ICICI Demat','ICICI Direct',1,'Shares','Market value'],['Shares · Zerodha Kite','Zerodha',1,'Shares','Market value'],['Shares · Groww','Groww',1,'Shares','Market value'],
+    ['Mutual funds · ICICI Demat','ICICI Direct',1,'Mutual funds','Market value'],['Mutual funds · Zerodha Coin','Zerodha',1,'Mutual funds','Market value'],
+    ['FD · ICICI','ICICI Bank',2,'FD','Principal plus interest'],['FD · SBI (1)','State Bank of India',2,'FD','Principal plus interest'],['FD · SBI (2)','State Bank of India',2,'FD','Principal plus interest'],
+    ['RD · ICICI iWish','ICICI Bank',2,'RD','Principal plus interest'],['NPS · Tier 1','NPS',2,'NPS','Market value'],['NPS · Tier 2','NPS',2,'NPS','Market value'],['PPF · SBI','State Bank of India',2,'PPF','Principal plus interest'],
+    ['LIC Jeevan Umang','LIC',3,'Insurance policy','Premiums paid'],['LIC Jeevan Anand','LIC',3,'Insurance policy','Premiums paid'],['LIC Jeevan Utsav','LIC',3,'Insurance policy','Premiums paid'],['LIC Smart Pension','LIC',3,'Insurance policy','Premiums paid']
+  ];
+  var $ = function (id) { return document.getElementById(id); };
+  var f0 = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }), f2 = new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  var fmt = { format: function (n) { return Math.round(n * 100) % 100 === 0 ? f0.format(n) : f2.format(n); } };
+  var money = function (n) { return '₹' + fmt.format(n); };
+
+  function load() {
+    try { var s = localStorage.getItem(KEY); if (s) return JSON.parse(s); } catch (e) {}
+    return null;
+  }
+  var store = load() || { accounts: SEED.map(function (r, i) { return { id: 'a' + (i + 1), name: r[0], inst: r[1], group: GROUPS[r[2]], type: r[3], basis: r[4], due: '' }; }), snaps: [], next: 100 };
+  var canSave = true;
+  function persist() { try { localStorage.setItem(KEY, JSON.stringify(store)); canSave = true; } catch (e) { canSave = false; } }
+
+  function parse(s) {
+    s = String(s || '').replace(/[₹,\s]/g, '');
+    if (s === '') return null;
+    if (!/^-?\d+(\.\d+)?$/.test(s)) return NaN;
+    return parseFloat(s);
+  }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function sortedSnaps() { return store.snaps.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; }); }
+  function lastBefore(id, date) {
+    var v = null, d = null;
+    sortedSnaps().forEach(function (s) { if (s.date <= date && s.values[id] != null) { v = s.values[id]; d = s.date; } });
+    return v == null ? null : { v: v, d: d };
+  }
+  function ensureSnap(date) {
+    var s = snapFor(date);
+    if (!s) { s = { date: date, values: {} }; store.snaps.push(s); store.accounts.forEach(function (a) { var l = lastBefore(a.id, date); if (l) s.values[a.id] = l.v; }); }
+    return s;
+  }
+  function snapFor(date) { return store.snaps.filter(function (s) { return s.date === date; })[0]; }
+  function sign(acc) { return acc.group === 'Liabilities' ? -1 : 1; }
+
+  var inputs = {};
+  function renderUpdate() {
+    var date = $('asof').value, host = $('groups'); host.textContent = ''; inputs = {};
+    var snap = snapFor(date);
+    GROUPS.forEach(function (g) {
+      var accs = store.accounts.filter(function (a) { return a.group === g && !a.archived; });
+      if (!accs.length) return;
+      var head = el('div', 'head'); head.appendChild(el('span', 'label', g));
+      var tot = el('span', 'total', ''); tot.dataset.group = g; head.appendChild(tot); host.appendChild(head);
+      accs.forEach(function (a) {
+        var row = el('div', 'row'), left = el('div');
+        left.appendChild(el('div', 'name', a.name));
+        left.appendChild(el('div', 'inst', [a.inst, a.basis !== 'Balance' ? a.basis : ''].filter(Boolean).join(' · ')));
+        var last = lastBefore(a.id, date);
+        var lastEl = el('div', 'last', last ? 'Last ' + money(last.v) + ' on ' + last.d : 'No value yet');
+        var wrap = el('div', 'amtwrap'); wrap.appendChild(el('span', '', '₹'));
+        var inp = document.createElement('input'); inp.type = 'text'; inp.inputMode = 'decimal'; inp.autocomplete = 'off';
+        inp.setAttribute('aria-label', a.name + ' value');
+        inp.placeholder = last ? fmt.format(last.v) : '0';
+        if (snap && snap.values[a.id] != null) inp.value = fmt.format(snap.values[a.id]);
+        inp.addEventListener('input', totals);
+        inp.addEventListener('blur', function () { var n = parse(inp.value); if (n != null && !isNaN(n)) inp.value = fmt.format(n); });
+        inp.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') { e.preventDefault(); var all = Object.keys(inputs).map(function (k) { return inputs[k]; }); var i = all.indexOf(inp); if (all[i + 1]) all[i + 1].focus(); else $('save').focus(); }
+        });
+        inputs[a.id] = inp; wrap.appendChild(inp);
+        row.appendChild(left); row.appendChild(lastEl); row.appendChild(wrap); host.appendChild(row);
+      });
+    });
+    totals();
+  }
+  function effective(a, date) {
+    var inp = inputs[a.id], n = inp ? parse(inp.value) : null;
+    if (n != null && !isNaN(n)) return n;
+    var l = lastBefore(a.id, date); return l ? l.v : 0;
+  }
+  function totals() {
+    var date = $('asof').value, net = 0, sums = {};
+    store.accounts.forEach(function (a) { if (a.archived) return; var v = effective(a, date); sums[a.group] = (sums[a.group] || 0) + v; net += sign(a) * v; });
+    document.querySelectorAll('[data-group]').forEach(function (t) { t.textContent = money(sums[t.dataset.group] || 0); });
+    $('nw').textContent = money(net);
+  }
+  function say(id, text, cls) { var m = $(id); m.textContent = text; m.className = 'msg' + (cls ? ' ' + cls : ''); }
+
+  $('save').addEventListener('click', function () {
+    var date = $('asof').value;
+    if (!date) { say('msg', 'Pick a date first.', 'err'); return; }
+    var bad = null, entered = {};
+    store.accounts.forEach(function (a) {
+      if (a.archived) return; var n = parse(inputs[a.id].value);
+      if (isNaN(n)) bad = bad || a; else if (n != null) entered[a.id] = n;
+    });
+    if (bad) { say('msg', 'Check the amount for ' + bad.name + '.', 'err'); inputs[bad.id].focus(); return; }
+    var snap = snapFor(date);
+    if (!snap) { snap = { date: date, values: {} }; store.snaps.push(snap); }
+    store.accounts.forEach(function (a) {
+      if (a.archived) return;
+      if (entered[a.id] != null) snap.values[a.id] = entered[a.id];
+      else if (snap.values[a.id] == null) { var l = lastBefore(a.id, date); if (l) snap.values[a.id] = l.v; }
+    });
+    persist(); renderUpdate(); renderHist();
+    say('msg', canSave ? 'Saved ' + Object.keys(entered).length + ' updated, ' + (Object.keys(snap.values).length - Object.keys(entered).length) + ' carried forward.' : 'Could not save in this browser. Export a backup now.', canSave ? 'ok' : 'err');
+  });
+
+  function renderHist() {
+    var host = $('hist'); host.textContent = '';
+    var snaps = sortedSnaps().reverse();
+    if (!snaps.length) { host.appendChild(el('p', 'help', 'No snapshots yet. Save one from the first tab.')); return; }
+    var t = document.createElement('table'), hr = document.createElement('tr');
+    ['Date'].concat(GROUPS.slice(0, 4), ['Liabilities', 'Net worth']).forEach(function (h) { hr.appendChild(el('th', '', h)); });
+    var th = document.createElement('thead'); th.appendChild(hr); t.appendChild(th);
+    var tb = document.createElement('tbody');
+    snaps.forEach(function (s) {
+      var sums = {}, net = 0;
+      store.accounts.forEach(function (a) { var v = s.values[a.id]; if (v == null) return; sums[a.group] = (sums[a.group] || 0) + v; net += sign(a) * v; });
+      var tr = document.createElement('tr'); tr.appendChild(el('td', '', s.date));
+      GROUPS.forEach(function (g) { tr.appendChild(el('td', '', money(sums[g] || 0))); });
+      tr.appendChild(el('td', '', money(net))); tb.appendChild(tr);
+    });
+    t.appendChild(tb); host.appendChild(t);
+  }
+
+  function download(name, type, text) {
+    var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: type })); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+  $('exp-json').addEventListener('click', function () { download('finance-tracker-backup.json', 'application/json', JSON.stringify(store, null, 2)); say('histmsg', 'Backup downloaded.', 'ok'); });
+  $('exp-csv').addEventListener('click', function () {
+    var q = function (s) { return '"' + String(s).replace(/"/g, '""') + '"'; };
+    var lines = [['date', 'account', 'group', 'type', 'basis', 'amount_inr'].map(q).join(',')];
+    sortedSnaps().forEach(function (s) { store.accounts.forEach(function (a) { if (s.values[a.id] != null) lines.push([s.date, a.name, a.group, a.type, a.basis, s.values[a.id]].map(q).join(',')); }); });
+    download('finance-tracker-snapshots.csv', 'text/csv', lines.join('\n')); say('histmsg', 'CSV downloaded.', 'ok');
+  });
+  $('imp').addEventListener('click', function () { $('impfile').click(); });
+  $('impfile').addEventListener('change', function () {
+    var f = this.files[0]; if (!f) return; var r = new FileReader();
+    r.onload = function () {
+      try { var d = JSON.parse(r.result); if (!Array.isArray(d.accounts) || !Array.isArray(d.snaps)) throw 0; store = d; persist(); renderAll(); say('histmsg', 'Backup restored.', 'ok'); }
+      catch (e) { say('histmsg', 'That file is not a valid backup.', 'err'); }
+    }; r.readAsText(f); this.value = '';
+  });
+  $('wipe').addEventListener('click', function () {
+    if (!confirm('Erase all accounts and snapshots in this browser? Export a backup first if unsure.')) return;
+    try { localStorage.removeItem(KEY); } catch (e) {} location.reload();
+  });
+
+  $('addform').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = $('n-name').value.trim(); if (!name) return;
+    var open = parse($('n-opening').value);
+    if (isNaN(open)) { say('addmsg', 'Opening balance must be a number.', 'err'); return; }
+    var acc = { id: 'a' + (store.next++), name: name, inst: $('n-inst').value.trim(), group: $('n-group').value, type: $('n-type').value, basis: $('n-basis').value, due: $('n-date').value };
+    store.accounts.push(acc);
+    if (open != null) { ensureSnap($('asof').value).values[acc.id] = open; }
+    persist(); this.reset(); renderAll(); say('addmsg', name + ' added.', 'ok');
+  });
+
+  function tab(which) {
+    ['update', 'add', 'hist'].forEach(function (k) {
+      $('p-' + k).classList.toggle('hidden', k !== which); $('t-' + k).setAttribute('aria-selected', k === which ? 'true' : 'false');
+    });
+  }
+  ['update', 'add', 'hist'].forEach(function (k) { $('t-' + k).addEventListener('click', function () { tab(k); }); });
+  $('theme').addEventListener('click', function (e) {
+    e.preventDefault(); var r = document.documentElement;
+    var dark = r.getAttribute('data-theme') === 'dark' || (!r.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
+    r.setAttribute('data-theme', dark ? 'light' : 'dark');
+  });
+  $('asof').addEventListener('change', function () {
+    var typed = {}; Object.keys(inputs).forEach(function (k) { if (inputs[k].value.trim() !== '') typed[k] = inputs[k].value; });
+    renderUpdate();
+    Object.keys(typed).forEach(function (k) { if (inputs[k] && inputs[k].value === '') inputs[k].value = typed[k]; });
+    totals();
+  });
+
+  function renderAll() { renderUpdate(); renderHist(); }
+  var g = $('n-group'); GROUPS.forEach(function (n) { var o = document.createElement('option'); o.textContent = n; g.appendChild(o); });
+  var now = new Date(); $('asof').value = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+  renderAll();
+})();
+</script>
+</body>
+</html>

@@ -93,6 +93,7 @@ P0 is the v1 release, P1 follows within the next two releases, P2 is later.
 | Dashboard | Net worth, liquid cash, total investments, total liabilities, change vs last month. Accounts grouped by the four groups, each with source label and age |
 | Account management | Add, edit, archive accounts. Templates for common Indian types (savings, credit card, FD, mutual fund, PPF, EPF, home loan) pre-fill fields |
 | Manual entry | Update a balance in one field. Pre-filled with the last value, date defaults to today, Enter saves and moves to the next account |
+| Entry form prototype | A working browser form (`design/entry-form.html`) for entering balances for a chosen date, adding accounts and exporting CSV or a JSON backup. Data stays in the browser. It validates the entry flow before the desktop app exists |
 | Update All wizard | Walks through only accounts that are stale or manual, one screen each, keyboard-first |
 | Statement import | Drag and drop CSV, XLSX or PDF statements. Column mapping is remembered per bank. Duplicates detected by date, amount and reference |
 | Net-worth history | Line chart over time built from snapshots, with 1M, 6M, 1Y and All views |
