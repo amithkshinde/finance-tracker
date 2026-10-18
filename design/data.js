@@ -9,6 +9,7 @@
       window.FT_SEED.accounts.forEach(function (sa) {
         if (sa.name !== a.name) return;
         if (!a.fds && sa.fds) a.fds = sa.fds;
+        if (!a.premium && sa.premium) a.premium = sa.premium;
         if (!a.rds && sa.rds) { a.rds = sa.rds; a.note = sa.note; }
       });
     });
@@ -53,6 +54,12 @@
     rows: function () {
       return FT.accounts().map(function (a) { var l = FT.last(a.id); return { a: a, v: l ? l.v : null, d: l ? l.d : null, age: l ? FT.ageDays(l.d) : null }; });
     },
+    premiumText: function (a) {
+      if (!a.premium) return '';
+      var t = new Date(), u = a.premium.until.split('-'), left = (+u[0] - t.getFullYear()) * 12 + (+u[1] - (t.getMonth() + 1));
+      return FT.money(a.premium.monthly) + ' a month until ' + MON[+u[1] - 1] + ' ' + u[0] + (left > 0 ? ' (' + left + ' left)' : '');
+    },
+    premiumTotal: function () { return FT.accounts().reduce(function (s, a) { return s + (a.premium ? a.premium.monthly : 0); }, 0); },
     fmtDate: function (d) { return d ? (+d.slice(8, 10)) + ' ' + MON[+d.slice(5, 7) - 1] + ' ' + d.slice(0, 4) : ''; }
   };
   window.FT = FT;

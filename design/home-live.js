@@ -49,10 +49,11 @@
     var rs = rows.filter(function (r) { return r.a.group === n; }); if (!rs.length) return;
     var sec = el('section'), head = el('div', 'head'), sum = 0;
     rs.forEach(function (r) { sum += r.v || 0; });
-    head.appendChild(el('span', 'label', n)); head.appendChild(el('span', 'total', FT.money(sum))); sec.appendChild(head);
+    head.appendChild(el('span', 'label', n));
+    if (n === 'Insurance and policies' && FT.premiumTotal()) { var pb = el('span', 'sub', FT.money(FT.premiumTotal()) + ' a month in premiums'); pb.style.cssText = 'flex:1;margin-left:12px'; head.appendChild(pb); } head.appendChild(el('span', 'total', FT.money(sum))); sec.appendChild(head);
     rs.forEach(function (r) {
       var row = el('div', 'row'), m = el('div'); m.appendChild(el('div', 'name', r.a.name));
-      var sub = [r.a.inst, r.a.basis && r.a.basis !== 'Balance' ? r.a.basis : ''].filter(Boolean).join(' · '); if (sub) m.appendChild(el('div', 'inst', sub));
+      var sub = (r.a.premium ? [FT.premiumText(r.a)] : [r.a.inst, r.a.basis && r.a.basis !== 'Balance' ? r.a.basis : '']).filter(Boolean).join(' · '); if (sub) m.appendChild(el('div', 'inst', sub));
       row.appendChild(m); row.appendChild(el('span', 'badge', 'Manual')); row.appendChild(el('div', 'amt', r.v == null ? '–' : FT.money(r.v)));
       var sv = r.age == null ? 'amber' : FT.sev(r.age), ag = el('div', 'age ' + sv); ag.appendChild(el('span', 'dot ' + sv));
       ag.appendChild(document.createTextNode(r.age == null ? 'no value' : r.age === 0 ? 'today' : r.age + 'd ago')); row.appendChild(ag); sec.appendChild(row);

@@ -353,7 +353,11 @@
    "group": "Insurance and policies",
    "type": "Insurance policy",
    "basis": "Premiums paid",
-   "due": ""
+   "due": "",
+   "premium": {
+    "monthly": 2733,
+    "until": "2036-01"
+   }
   },
   {
    "id": "a30",
@@ -362,7 +366,11 @@
    "group": "Insurance and policies",
    "type": "Insurance policy",
    "basis": "Premiums paid",
-   "due": ""
+   "due": "",
+   "premium": {
+    "monthly": 4492,
+    "until": "2044-10"
+   }
   },
   {
    "id": "a31",
@@ -371,7 +379,11 @@
    "group": "Insurance and policies",
    "type": "Insurance policy",
    "basis": "Premiums paid",
-   "due": ""
+   "due": "",
+   "premium": {
+    "monthly": 5183,
+    "until": "2041-10"
+   }
   },
   {
    "id": "a32",
